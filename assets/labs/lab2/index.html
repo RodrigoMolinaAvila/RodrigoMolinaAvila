@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio 2 — Conceptos OWL</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --accent: #2c5f8a;
+    --code-bg: #f4f5f6;
+    --highlight: #e8f0f8;
+    --warn-bg: #fffdf0;
+    --warn-border: #c9a028;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  h1 { font-size: 1.8rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; }
+  h2 { font-size: 1.3rem; font-weight: 600; margin: 2.5rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.4rem; color: var(--accent); }
+  .subtitle { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+  nav { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.3rem; margin-bottom: 2rem; }
+  nav ul { padding-left: 1.3rem; list-style: none; }
+  nav li { margin: 0.3rem 0; }
+  nav a { color: var(--accent); text-decoration: none; }
+  nav a:hover { text-decoration: underline; }
+
+  .concept {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .concept h3 { margin-top: 0; }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.7rem 1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0.5rem 0 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  pre code { font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; }
+
+  .example {
+    background: var(--highlight);
+    border-radius: 5px;
+    padding: 0.8rem 1.1rem;
+    margin: 0.8rem 0;
+    font-size: 0.92rem;
+  }
+  .example::before { content: '💡 Ejemplo: '; font-weight: 700; }
+
+  .xref { font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem; }
+  .xref::before { content: '🔗 Usado en: '; }
+  .xref a { color: var(--accent); }
+
+  .warning {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 5px;
+    padding: 0.7rem 1rem;
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+  }
+  .warning::before { content: '⚠️ '; }
+
+  .intuition { font-style: italic; color: var(--text-secondary); margin: 0.3rem 0 0.6rem; font-size: 0.93rem; }
+
+  footer { margin-top: 3rem; text-align: center; font-size: 0.82rem; color: var(--text-secondary); border-top: 2px solid var(--border); padding-top: 1.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Interfaz del Conocimiento — Laboratorio 2</h1>
+<p class="subtitle">Conceptos, constructos y fundamentos OWL &middot; MDS7205 Grafos de Conocimiento &middot; Universidad de Chile</p>
+
+<nav aria-label="Índice de conceptos">
+  <strong>Conceptos cubiertos</strong>
+  <ul>
+    <li><a href="#c01">1. Propiedades simétricas (owl:SymmetricProperty)</a></li>
+    <li><a href="#c02">2. Propiedades transitivas (owl:TransitiveProperty)</a></li>
+    <li><a href="#c03">3. Propiedades inversas (owl:inverseOf)</a></li>
+    <li><a href="#c04">4. Cadena de propiedades (owl:propertyChainAxiom)</a></li>
+    <li><a href="#c05">5. Jerarquía de propiedades (rdfs:subPropertyOf)</a></li>
+    <li><a href="#c06">6. Clases equivalentes (owl:equivalentClass)</a></li>
+    <li><a href="#c07">7. Intersección de clases (owl:intersectionOf)</a></li>
+    <li><a href="#c08">8. Unión de clases (owl:unionOf)</a></li>
+    <li><a href="#c09">9. Complemento de clase (owl:complementOf)</a></li>
+    <li><a href="#c10">10. Restricción de valor (owl:hasValue)</a></li>
+    <li><a href="#c11">11. Restricción universal (owl:allValuesFrom)</a></li>
+    <li><a href="#c12">12. Open World Assumption (OWA)</a></li>
+    <li><a href="#c13">13. No Unique Name Assumption (UNA)</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================ -->
+<section id="c01" class="concept">
+<h3>1. owl:SymmetricProperty — Propiedad simétrica</h3>
+<p class="intuition">«Si A está casado con B, entonces B está casado con A.»</p>
+
+<p>Una propiedad <code>P</code> es <strong>simétrica</strong> si y solo si para todo par de individuos <code>x, y</code>: cuando <code>x P y</code> se cumple, entonces <code>y P x</code> también se cumple.</p>
+
+<p>En lógica: <code>P(x, y) → P(y, x)</code>.</p>
+
+<p>Este axioma es ideal para relaciones que por su naturaleza son bidireccionales: matrimonio, compromiso, hermandad, amistad. No tiene sentido decir «A es amigo de B» sin que B también sea amigo de A.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 28):</strong> <code>:sibling a owl:SymmetricProperty</code> — si Jacaerys es hermano de Lucerys, entonces Lucerys es hermano de Jacaerys.
+</div>
+
+<pre><code>:hasSpouse a owl:SymmetricProperty .
+
+# Con :RhaenyraTargaryen :hasSpouse :DaemonTargaryen
+# → infiere :DaemonTargaryen :hasSpouse :RhaenyraTargaryen</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p1" target="_blank">P1 — hasSpouse y engagedTo</a>; <a href="../interfaz_respuesta/index.html#p4" target="_blank">P4 — hasCousin y hasSibling</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c02" class="concept">
+<h3>2. owl:TransitiveProperty — Propiedad transitiva</h3>
+<p class="intuition">«Si A es ancestro de B y B es ancestro de C, entonces A es ancestro de C.»</p>
+
+<p>Una propiedad <code>P</code> es <strong>transitiva</strong> si y solo si para todo <code>x, y, z</code>: cuando <code>x P y</code> y <code>y P z</code>, entonces <code>x P z</code>.</p>
+
+<p>En lógica: <code>P(x, y) ∧ P(y, z) → P(x, z)</code>.</p>
+
+<p>La transitividad captura relaciones que se «heredan» a través de cadenas: ancestro, parte-de, ubicado-en, mayor-que.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 29):</strong> <code>:ancestorOf a owl:TransitiveProperty</code> — si Viserys es ancestro de Rhaenyra y Rhaenyra es ancestro de Jacaerys, entonces Viserys es ancestro de Jacaerys.
+</div>
+
+<pre><code>:hasParent a owl:TransitiveProperty .
+
+# Con :ViserysTargaryen :hasParent :BaelorTargaryen
+#  y :RhaenyraTargaryen :hasParent :ViserysTargaryen
+# → infiere :RhaenyraTargaryen :hasParent :BaelorTargaryen</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p2" target="_blank">P2 — hasParent</a>; <a href="../interfaz_respuesta/index.html#p3" target="_blank">P3 — ancestorOf</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c03" class="concept">
+<h3>3. owl:inverseOf — Propiedad inversa</h3>
+<p class="intuition">«Si A es hijo de B, entonces B es padre de A.»</p>
+
+<p>Dos propiedades <code>P</code> y <code>Q</code> son <strong>inversas</strong> si para todo <code>x, y</code>: <code>x P y</code> si y solo si <code>y Q x</code>. En OWL se declara con <code>P owl:inverseOf Q</code>.</p>
+
+<p>En lógica: <code>P(x, y) ↔ Q(y, x)</code>.</p>
+
+<p>Este axioma es fundamental para modelar direcciones opuestas de una misma relación: padre↔hijo, maestro↔discípulo, contiene↔está-contenido-en.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 27):</strong> <code>:child owl:inverseOf :parent</code> — si Rhaenyra es hija de Viserys, entonces Viserys es padre de Rhaenyra.
+</div>
+
+<pre><code>:hasChild owl:inverseOf :hasParent .
+
+# Con :ViserysTargaryen :hasChild :RhaenyraTargaryen
+# → infiere :RhaenyraTargaryen :hasParent :ViserysTargaryen</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p2" target="_blank">P2 — hasParent</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c04" class="concept">
+<h3>4. owl:propertyChainAxiom — Cadena de propiedades</h3>
+<p class="intuition">«El hermano del padre de A es el tío de A.»</p>
+
+<p>Una <strong>cadena de propiedades</strong> define una nueva propiedad como la composición de dos o más propiedades existentes. Si <code>P1 ◦ P2 ◦ ... ◦ Pn ⊑ Q</code>, entonces cuando existe un camino <code>x —P1→ y1 —P2→ ... —Pn→ z</code>, se infiere <code>x Q z</code>.</p>
+
+<p>Es uno de los mecanismos más expresivos de OWL 2 RL. Soporta cadenas de longitud arbitraria (típicamente 2 o 3 propiedades en RL).</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 30):</strong> <code>:uncle owl:propertyChainAxiom (:sibling :child)</code> — si Daemon es hermano de Viserys y Viserys tiene hijo Rhaenyra, entonces Daemon es tío de Rhaenyra.
+</div>
+
+<pre><code>:hasCousin owl:propertyChainAxiom (:hasParent :hasSibling :hasChild) .
+
+# Con x —hasParent→ p1 —hasSibling→ p2 —hasChild→ y
+# → infiere x :hasCousin y</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p3" target="_blank">P3 — ancestorOf</a>; <a href="../interfaz_respuesta/index.html#p4" target="_blank">P4 — hasCousin y hasSibling</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c05" class="concept">
+<h3>5. rdfs:subPropertyOf — Jerarquía de propiedades</h3>
+<p class="intuition">«Ser padre es una forma de ser ancestro.»</p>
+
+<p>Declara que una propiedad es <strong>subpropiedad</strong> de otra: si <code>P rdfs:subPropertyOf Q</code>, entonces para todo <code>x, y</code>: <code>x P y → x Q y</code>. Todo par conectado por la subpropiedad también lo está por la superpropiedad.</p>
+
+<p>Permite construir jerarquías de relaciones: <code>:hasMother rdfs:subPropertyOf :hasParent</code>.</p>
+
+<div class="example">
+<strong>Del curso (clase 3, diapositiva 19):</strong> <code>:mother rdfs:subPropertyOf :parent</code> — si Jacaerys tiene madre Rhaenyra, entonces también tiene como padre/madre a Rhaenyra.
+</div>
+
+<pre><code>:hasChild rdfs:subPropertyOf :ancestorOf .
+
+# Con :ViserysTargaryen :hasChild :RhaenyraTargaryen
+# → infiere :ViserysTargaryen :ancestorOf :RhaenyraTargaryen</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p3" target="_blank">P3 — ancestorOf</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c06" class="concept">
+<h3>6. owl:equivalentClass — Clase equivalente</h3>
+<p class="intuition">«Ser Targaryen es exactamente lo mismo que ser Persona y miembro de la Casa Targaryen.»</p>
+
+<p>Declara que dos clases tienen <strong>exactamente la misma extensión</strong> (el mismo conjunto de instancias). <code>C ≡ D</code> significa que todo <code>x ∈ C ↔ x ∈ D</code>.</p>
+
+<p>A diferencia de <code>rdfs:subClassOf</code> (⊑), la equivalencia (≡) permite inferencias en <strong>ambas direcciones</strong>: si una instancia satisface la definición de la clase anónima, el razonador la clasifica como miembro de la clase nombrada.</p>
+
+<div class="warning">
+<strong>¿Por qué equivalentClass y no subClassOf?</strong> Con <code>subClassOf</code>, si defines <code>C ⊑ Restricción</code>, el razonador puede inferir que los miembros de C cumplen la restricción, pero no al revés. Con <code>equivalentClass</code>, cualquiera que cumpla la restricción es clasificado como miembro de C.
+</div>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 40):</strong> <code>:Monarch owl:equivalentClass :Sovereign</code> — todo monarca es soberano y viceversa.
+</div>
+
+<pre><code>:Targaryen owl:equivalentClass [
+    owl:intersectionOf (:Person [ owl:hasValue :HouseTargaryen ; owl:onProperty :memberOf ])
+] .
+
+# → infiere :BaelaTargaryen a :Targaryen (porque cumple ambas condiciones)</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p5" target="_blank">P5 — Targaryen</a>; <a href="../interfaz_respuesta/index.html#p6" target="_blank">P6 — Valyrian</a>; <a href="../interfaz_respuesta/index.html#p7" target="_blank">P7 — Andal</a>; <a href="../interfaz_respuesta/index.html#p8" target="_blank">P8 — OnlyMarriesValyrians</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c07" class="concept">
+<h3>7. owl:intersectionOf — Intersección de clases</h3>
+<p class="intuition">«Un Targaryen es alguien que es Persona <em>Y</em> miembro de la Casa Targaryen.»</p>
+
+<p>Define una clase cuyas instancias deben pertenecer a <strong>todas</strong> las clases listadas. <code>C ≡ C₁ ⊓ C₂ ⊓ ... ⊓ Cₙ</code>.</p>
+
+<p>La intersección modela condiciones conjuntivas: «las personas que son estudiantes <em>y</em> trabajan <em>y</em> tienen beca».</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 44):</strong> <code>:NonTargaryenDragonRider owl:equivalentClass [owl:intersectionOf (:DragonRider [owl:complementOf :Targaryen])]</code> — jinetes de dragón que no son Targaryen.
+</div>
+
+<pre><code>owl:intersectionOf (
+    :Person
+    [ a owl:Restriction ; owl:onProperty :hasSpouse ; owl:allValuesFrom :Valyrian ]
+)</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p5" target="_blank">P5 — Targaryen</a>; <a href="../interfaz_respuesta/index.html#p8" target="_blank">P8 — OnlyMarriesValyrians</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c08" class="concept">
+<h3>8. owl:unionOf — Unión de clases</h3>
+<p class="intuition">«Un Valyrian es miembro de la Casa Targaryen <em>O</em> Velaryon <em>O</em> Celtigar.»</p>
+
+<p>Define una clase cuyas instancias deben pertenecer a <strong>al menos una</strong> de las clases listadas. <code>C ≡ C₁ ⊔ C₂ ⊔ ... ⊔ Cₙ</code>.</p>
+
+<p>La unión modela condiciones disyuntivas: «transporte público: metro <em>o</em> bus <em>o</em> tren».</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositivas 45–46):</strong> <code>:Valyrian owl:equivalentClass [owl:unionOf (:Targaryen :Velaryon :Celtigar)]</code> — ser Valyrian es pertenecer a cualquiera de las tres casas de sangre valyria.
+</div>
+
+<pre><code>:Valyrian owl:equivalentClass [
+    owl:unionOf (
+        [ owl:hasValue :HouseTargaryen ; owl:onProperty :memberOf ]
+        [ owl:hasValue :HouseVelaryon ; owl:onProperty :memberOf ]
+        [ owl:hasValue :HouseCeltigar ; owl:onProperty :memberOf ]
+    )
+]</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p6" target="_blank">P6 — Valyrian</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c09" class="concept">
+<h3>9. owl:complementOf — Complemento de clase</h3>
+<p class="intuition">«Un Andal es cualquiera que <em>no</em> es Valyrian.»</p>
+
+<p>Define una clase como el <strong>complemento</strong> de otra: contiene todos los individuos del dominio que <strong>no</strong> pertenecen a la clase complementada. <code>C ≡ ¬D</code>.</p>
+
+<div class="warning">
+<strong>OWA y complemento:</strong> Bajo Open World Assumption, un razonador OWL <strong>no puede inferir</strong> que un individuo pertenece al complemento solo porque no hay evidencia de que pertenece a la clase original. Podría haber información faltante. Para clasificar instancias en el complemento, se necesita evidencia positiva (aserción explícita o una restricción que fuerce la no-pertenencia, como <code>owl:differentFrom</code> o <code>owl:disjointWith</code>).
+</div>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 43):</strong> <code>:Dead owl:equivalentClass [owl:complementOf :Alive]</code> — los muertos son los no-vivos. Pero para inferir que alguien está muerto, hace falta evidencia (ej. una aserción explícita o una restricción de disjointness).
+</div>
+
+<pre><code>:Andal owl:equivalentClass [ owl:complementOf :Valyrian ] .
+
+# Con :AlicentHightower a :Andal como aserción explícita
+# → se confirma la pertenencia (no inferida del complemento, sino asertada)</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p7" target="_blank">P7 — Andal</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c10" class="concept">
+<h3>10. owl:hasValue — Restricción de valor</h3>
+<p class="intuicion">«Un Targaryen es alguien cuyo miembro-de es <em>exactamente</em> la Casa Targaryen.»</p>
+
+<p>Define la clase de individuos que tienen un <strong>valor específico</strong> (un individuo concreto o un literal) en una propiedad dada. La restricción <code>∃P.{v}</code> selecciona a los <code>x</code> tales que <code>x P v</code>.</p>
+
+<p>En lógica: <code>{ x | ⟨x, v⟩ ∈ P }</code>.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositivas 52–53):</strong> <code>:Targaryen rdfs:subClassOf [owl:hasValue "Targaryen" ; owl:onProperty :familyName]</code> — los Targaryen tienen apellido «Targaryen». Con <code>equivalentClass</code> en vez de <code>subClassOf</code>, se infiere pertenencia a la clase.
+</div>
+
+<pre><code>[ a owl:Restriction ;
+  owl:onProperty :memberOf ;
+  owl:hasValue :HouseTargaryen
+]</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p5" target="_blank">P5 — Targaryen</a>; <a href="../interfaz_respuesta/index.html#p6" target="_blank">P6 — Valyrian</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c11" class="concept">
+<h3>11. owl:allValuesFrom — Restricción universal</h3>
+<p class="intuition">«Solo se casa con Valyrians: <em>todos</em> sus cónyuges son Valyrian.»</p>
+
+<p>Define la clase de individuos tales que <strong>todos</strong> los valores de una propiedad dada pertenecen a una clase específica. <code>∀P.C = { x | ∀y: x P y → y ∈ C }</code>.</p>
+
+<div class="warning">
+<strong>Verdad vacua:</strong> Si un individuo <strong>no tiene valores</strong> para la propiedad, la restricción universal se satisface <strong>vacuamente</strong> (no hay contraejemplo). Esto hace que personas sin cónyuges también sean clasificadas como <code>:OnlyMarriesValyrians</code>. Para evitar esto, se necesitaría combinarla con una restricción de cardinalidad mínima (<code>owl:minCardinality</code>), pero eso excede OWL 2 RL.
+</div>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositivas 49–50):</strong> <code>:PureTargaryen rdfs:subclassOf [owl:allValuesFrom :Targaryen ; owl:onProperty :parent]</code> — un Targaryen puro tiene ambos padres Targaryen. Con <code>subClassOf</code> se evita la verdad vacua.
+</div>
+
+<pre><code>[ a owl:Restriction ;
+  owl:onProperty :hasSpouse ;
+  owl:allValuesFrom :Valyrian
+]</code></pre>
+
+<div class="xref"><a href="../interfaz_respuesta/index.html#p8" target="_blank">P8 — OnlyMarriesValyrians</a></div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c12" class="concept">
+<h3>12. Open World Assumption (OWA)</h3>
+<p class="intuition">«Que no esté en los datos no significa que sea falso.»</p>
+
+<p>RDFS y OWL operan bajo <strong>Open World Assumption</strong>: lo que no se conoce no se asume como falso; simplemente es <strong>desconocido</strong>. La información en la Web se presume siempre incompleta.</p>
+
+<p><strong>Implicancia práctica:</strong> Un razonador OWL no puede inferir negaciones por ausencia de información. Si no se ha dicho que Alicent es Valyrian, el razonador <em>no</em> concluye que no lo es; simplemente no lo sabe. Esto es fundamentalmente distinto a las bases de datos relacionales (closed world), donde lo que no está en la tabla se asume falso.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositiva 15–16):</strong> ¿Cuántos hijos tiene Rhaenyra Targaryen? En los datos aparecen 3 (Jacaerys, Lucerys, Joffrey), pero bajo OWA podría tener más; simplemente no los conocemos.
+</div>
+
+<div class="xref">Afecta a <a href="../interfaz_respuesta/index.html#p7" target="_blank">P7 — Andal</a>, <a href="../interfaz_respuesta/index.html#p8" target="_blank">P8 — OnlyMarriesValyrians</a> y cualquier razonamiento con complementos o restricciones universales.</div>
+</section>
+
+<!-- ============================================================ -->
+<section id="c13" class="concept">
+<h3>13. No Unique Name Assumption (no-UNA)</h3>
+<p class="intuition">«Dos nombres distintos podrían referirse a la misma persona.»</p>
+
+<p>RDFS y OWL <strong>no</strong> asumen que IRIs distintas refieren a entidades distintas. Dos IRIs pueden denotar el mismo recurso del mundo real (ej. <code>wd:Q2887</code> y <code>dbp:Santiago</code> refieren a la misma ciudad).</p>
+
+<p><strong>Implicancia práctica:</strong> Sin <code>owl:differentFrom</code> o <code>owl:disjointWith</code> explícitos, el razonador considera posible que dos instancias aparentemente distintas sean la misma. Esto puede afectar conteos y razonamientos sobre cardinalidad.</p>
+
+<div class="example">
+<strong>Del curso (clase 4, diapositivas 17–18):</strong> Sin la declaración <code>owl:differentFrom</code>, el razonador consideraría posible que Jacaerys, Lucerys y Joffrey sean la misma persona con nombres distintos.
+</div>
+
+<div class="xref">Este supuesto no afecta directamente ningún problema de este laboratorio (no hay restricciones de cardinalidad ni necesidad de distinguir individuos), pero es esencial entenderlo para modelar correctamente en OWL.</div>
+</section>
+
+<!-- ============================================================ -->
+<footer>
+  <p>Conceptos extraídos de las clases del curso MDS7205 (1_Intro, 2_RDF, 3_RDFS_OWL2, 4_Razonamiento_con_OWL) &middot; Universidad de Chile &middot; 2026</p>
+  <p style="margin-top:0.3rem;">Ver también: <a href="../interfaz_respuesta/index.html">Interfaz con la Respuesta Correcta</a> — exposición de los 8 problemas del laboratorio.</p>
+</footer>
+
+</body>
+</html>

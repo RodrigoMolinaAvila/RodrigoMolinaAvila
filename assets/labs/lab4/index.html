@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Lab4 — Conceptos SPARQL</title>
+<style>:root{--bg:#fafafa;--card:#fff;--text:#1a1a1a;--muted:#555;--border:#e0e0e0;--accent:#2c5f8a;--code:#f4f5f6}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{font-size:1.8rem;color:var(--accent)}h2{font-size:1.2rem;margin:2rem 0 .8rem;border-bottom:2px solid var(--border);padding-bottom:.3rem}
+h3{font-size:1rem;color:var(--accent);margin:1.5rem 0 .4rem}.subtitle{color:var(--muted);margin-bottom:1.5rem}
+nav{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem}
+.concept{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;margin-bottom:1.2rem}
+pre{background:var(--code);border:1px solid var(--border);border-radius:5px;padding:.6rem 1rem;overflow-x:auto;font-size:.84rem;line-height:1.5;margin:.4rem 0 .8rem;white-space:pre-wrap;word-break:break-word}
+pre code{font-family:'Cascadia Code','Fira Code','Consolas',monospace}
+.example{background:#e8f0f8;border-radius:5px;padding:.7rem 1rem;margin:.6rem 0;font-size:.9rem}.example::before{content:'💡 ';font-weight:700}
+.xref{font-size:.85rem;color:var(--muted);margin-top:.5rem}.note{background:#fffdf0;border:1px solid #c9a028;border-radius:5px;padding:.6rem 1rem;margin-top:.6rem;font-size:.88rem}.note::before{content:'⚠️ '}
+footer{margin-top:3rem;text-align:center;font-size:.82rem;color:var(--muted);border-top:2px solid var(--border);padding-top:1.5rem}</style></head><body>
+<h1>Interfaz del Conocimiento — SPARQL en Wikidata</h1><p class="subtitle">Clases 6 y 7 &middot; MDS7205 &middot; U. de Chile</p>
+<nav><strong>Conceptos</strong><ul>
+<li><a href="#c1">1. Estructura SELECT-WHERE</a></li><li><a href="#c2">2. Prefijos Wikidata (wdt:, wd:)</a></li>
+<li><a href="#c3">3. SERVICE wikibase:label</a></li><li><a href="#c4">4. FILTER</a></li>
+<li><a href="#c5">5. UNION</a></li><li><a href="#c6">6. BIND</a></li>
+<li><a href="#c7">7. OPTIONAL</a></li><li><a href="#c8">8. Aggregación: COUNT, AVG, GROUP BY</a></li>
+<li><a href="#c9">9. Subqueries</a></li><li><a href="#c10">10. FILTER NOT EXISTS</a></li></ul></nav>
+
+<section id="c1" class="concept"><h3>1. SELECT-WHERE</h3>
+<p>Estructura básica de SPARQL. SELECT proyecta variables, WHERE contiene los patrones de grafo (triple patterns).</p>
+<pre><code>SELECT ?var1 ?var2 WHERE { ?s ?p ?o . }</code></pre>
+<div class="xref">Usado en todos los problemas.</div></section>
+
+<section id="c2" class="concept"><h3>2. Prefijos Wikidata</h3>
+<p><code>wd:Q232141</code> = entidad (Universidad de Chile). <code>wdt:P31</code> = propiedad directa (instancia de). <code>p:P166</code> = propiedad con calificadores. <code>ps:P166</code> = valor de statement. <code>pq:P585</code> = calificador.</p>
+<pre><code>wd:Q232141 wdt:P31 ?clase .          # Q232141 es instancia de ?clase
+?persona wdt:P69 wd:Q232141 .         # estudió en UChile
+?persona p:P166 ?stmt . ?stmt ps:P166 ?premio .  # premio con calificadores</code></pre></section>
+
+<section id="c3" class="concept"><h3>3. SERVICE wikibase:label</h3>
+<p>Obtiene etiquetas legibles en el idioma solicitado. Agrega automáticamente variables <code>?xLabel</code> por cada variable <code>?x</code>.</p>
+<pre><code>SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". }</code></pre>
+<div class="note">Sin este SERVICE, los resultados muestran Q-codes en vez de nombres legibles.</div></section>
+
+<section id="c4" class="concept"><h3>4. FILTER</h3>
+<p>Filtra resultados por condiciones booleanas. Operadores: <, >, =, !=, >=, <=, &&, ||, !.</p>
+<pre><code>FILTER (?fechaFundacion < ?fechaUCH)
+FILTER (?otraU != wd:Q232141)</code></pre></section>
+
+<section id="c5" class="concept"><h3>5. UNION</h3>
+<p>Combina resultados de dos o más patrones alternativos. Equivalente al OR lógico.</p>
+<pre><code>{ ?p wdt:P69 wd:Q232141. } UNION { ?p wdt:P108 wd:Q232141. }</code></pre>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p6">P6</a>, <a href="../interfaz_respuesta/index.html#p7">P7</a></div></section>
+
+<section id="c6" class="concept"><h3>6. BIND</h3>
+<p>Asigna una expresión a una variable. Útil para crear columnas calculadas o constantes.</p>
+<pre><code>BIND("estudiante" AS ?rol)
+BIND(YEAR(NOW()) - YEAR(?fechaNacimiento) AS ?edad)</code></pre>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p6">P6</a>, <a href="../interfaz_respuesta/index.html#p8">P8</a></div></section>
+
+<section id="c7" class="concept"><h3>7. OPTIONAL</h3>
+<p>Hace que un patrón sea opcional: si no matchea, la variable queda sin valor (no se elimina la fila).</p>
+<pre><code>OPTIONAL { ?p wdt:P569 ?fechaNacimiento. }
+OPTIONAL { ?p wdt:P19 ?lugar . ?lugar wdt:P17 ?pais. }</code></pre>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p7">P7</a></div></section>
+
+<section id="c8" class="concept"><h3>8. Agregación: COUNT, AVG, GROUP BY</h3>
+<p>COUNT cuenta resultados. AVG calcula promedio. GROUP BY agrupa. ORDER BY ordena.</p>
+<pre><code>SELECT ?ocupacion (COUNT(?p) AS ?cantidad) WHERE {...} GROUP BY ?ocupacion ORDER BY DESC(?cantidad)
+SELECT (AVG(?edad) AS ?promedio) WHERE {...}</code></pre>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p5">P5</a>, <a href="../interfaz_respuesta/index.html#p8">P8</a></div></section>
+
+<section id="c9" class="concept"><h3>9. Subqueries</h3>
+<p>Un SELECT anidado dentro de otro. La subquery se ejecuta primero y su resultado está disponible en la query externa.</p>
+<pre><code>SELECT ?p ?edad WHERE {
+  { SELECT (AVG(?e) AS ?prom) WHERE {...} }   # subquery
+  ?p wdt:P69 wd:Q232141 .                     # query externa
+  FILTER (?edad > ?prom)
+}</code></pre>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p8">P8</a></div></section>
+
+<section id="c10" class="concept"><h3>10. FILTER NOT EXISTS</h3>
+<p>Verifica que un patrón NO exista en el grafo. Útil para comprobar ausencia de información (ej. personas sin fecha de muerte = vivas).</p>
+<pre><code>FILTER NOT EXISTS { ?p wdt:P570 ?fechaMuerte. }</code></pre>
+<div class="note">En Wikidata, si una persona no tiene wdt:P570 (fecha de muerte), se asume viva. Esto puede ser impreciso para personas históricas sin dato registrado.</div>
+<div class="xref">Usado en <a href="../interfaz_respuesta/index.html#p8">P8</a></div></section>
+
+<footer><p>Conceptos de Clases 6 y 7: SPARQL I y II &middot; MDS7205 &middot; 2026</p></footer>
+</body></html>

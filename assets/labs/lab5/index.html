@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Lab5 — Conceptos Cypher/GQL</title>
+<style>:root{--bg:#fafafa;--card:#fff;--text:#1a1a1a;--muted:#555;--border:#e0e0e0;--accent:#2c5f8a;--code:#f4f5f6}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;max-width:960px;margin:0 auto;padding:2rem 1.5rem}
+h1{font-size:1.8rem;color:var(--accent)}h2{font-size:1.2rem;margin:2rem 0 .8rem;border-bottom:2px solid var(--border);padding-bottom:.3rem}
+h3{font-size:1rem;color:var(--accent);margin:1.5rem 0 .4rem}.subtitle{color:var(--muted);margin-bottom:1.5rem}
+nav{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.3rem;margin-bottom:2rem}
+.concept{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.3rem;margin-bottom:1rem}
+pre{background:var(--code);border:1px solid var(--border);border-radius:5px;padding:.5rem .9rem;overflow-x:auto;font-size:.83rem;line-height:1.5;margin:.3rem 0 .6rem;white-space:pre-wrap;word-break:break-word}
+pre code{font-family:'Cascadia Code','Fira Code','Consolas',monospace}
+.example{background:#e8f0f8;border-radius:5px;padding:.6rem .9rem;margin:.5rem 0;font-size:.88rem}.example::before{content:'💡 ';font-weight:700}
+footer{margin-top:3rem;text-align:center;font-size:.82rem;color:var(--muted);border-top:2px solid var(--border);padding-top:1.5rem}</style></head><body>
+<h1>Interfaz del Conocimiento — Cypher/GQL</h1><p class="subtitle">Clases 8 y 9 &middot; MDS7205 &middot; U. de Chile</p>
+<nav><strong>Conceptos</strong><ul>
+<li><a href="#c1">1. MATCH — patrones de grafo</a></li><li><a href="#c2">2. Etiquetas y propiedades</a></li>
+<li><a href="#c3">3. Relaciones y direcciones</a></li><li><a href="#c4">4. WITH — pipeline</a></li>
+<li><a href="#c5">5. WHERE — filtros</a></li><li><a href="#c6">6. Agregación: COUNT, COLLECT</a></li>
+<li><a href="#c7">7. ORDER BY, LIMIT, DISTINCT</a></li><li><a href="#c8">8. Caminos de longitud variable (*1..)</a></li>
+<li><a href="#c9">9. UNWIND</a></li></ul></nav>
+
+<section id="c1" class="concept"><h3>1. MATCH — patrones de grafo</h3>
+<p>Define el patrón a buscar en el grafo. Similar a WHERE en SPARQL.</p>
+<pre><code>MATCH (p:Person)-[:ACTED_IN]->(m:Movie) RETURN p.name, m.title</code></pre></section>
+
+<section id="c2" class="concept"><h3>2. Etiquetas y propiedades</h3>
+<p><code>:Movie</code>, <code>:Person</code> son etiquetas de nodo. <code>{title: "Inception"}</code> filtra por propiedad. <code>m.title</code> accede a propiedad.</p>
+<pre><code>MATCH (m:Movie {title: "Inception"}) RETURN m.genre</code></pre></section>
+
+<section id="c3" class="concept"><h3>3. Relaciones y direcciones</h3>
+<p><code>-[:ACTED_IN]-></code> relación dirigida. <code>&lt;-[:DIRECTED]-</code> dirección inversa. <code>-[:FRIEND_OF]-</code> sin dirección.</p>
+<pre><code>MATCH (p)-[r:ACTED_IN]->(m) RETURN r.role         # acceder a propiedad de la relación
+MATCH (p)-[:FRIEND_OF]-(f)                          # bidireccional</code></pre></section>
+
+<section id="c4" class="concept"><h3>4. WITH — pipeline</h3>
+<p>Pasa resultados entre partes de la consulta. Permite agregar, filtrar y renombrar variables.</p>
+<pre><code>MATCH (p)-[:ACTED_IN]->(m)
+WITH m, COUNT(p) AS n WHERE n > 2 RETURN m.title</code></pre></section>
+
+<section id="c5" class="concept"><h3>5. WHERE — filtros</h3>
+<p>Filtra resultados. Soporta operadores: <code>>, <, =, <>, IN, NOT, AND, OR, EXISTS</code>.</p>
+<pre><code>WHERE n > 2 AND m.title <> "Inception"
+WHERE NOT p.name IN ["Tom", "Jerry"]</code></pre></section>
+
+<section id="c6" class="concept"><h3>6. Agregación: COUNT, COLLECT</h3>
+<p><code>COUNT</code> cuenta resultados. <code>COLLECT</code> agrupa en lista.</p>
+<pre><code>WITH p, COUNT(DISTINCT f) AS n_friends
+WITH COLLECT(DISTINCT f.name) AS names</code></pre></section>
+
+<section id="c7" class="concept"><h3>7. ORDER BY, LIMIT, DISTINCT</h3>
+<pre><code>ORDER BY n_fr DESC LIMIT 3
+RETURN DISTINCT name</code></pre></section>
+
+<section id="c8" class="concept"><h3>8. Caminos de longitud variable</h3>
+<p><code>*1..</code> = uno o más saltos. <code>*1..3</code> = 1 a 3 saltos. <code>*</code> = cero o más.</p>
+<pre><code>MATCH (p:Person {name:"Margot Robbie"})-[:FRIEND_OF*1..]-(f:Person)</code></pre></section>
+
+<section id="c9" class="concept"><h3>9. UNWIND</h3>
+<p>Expande una lista en filas individuales. Útil tras COLLECT para deduplicar.</p>
+<pre><code>WITH COLLECT(DISTINCT f.name) AS names UNWIND names AS n RETURN DISTINCT n</code></pre></section>
+
+<footer><p>Conceptos de Clases 8 y 9: GQL I y II &middot; MDS7205 &middot; 2026</p></footer>
+</body></html>

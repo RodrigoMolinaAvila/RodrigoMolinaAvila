@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio 3 — Conceptos SHACL</title>
+<style>
+  :root { --bg: #fafafa; --card: #fff; --text: #1a1a1a; --muted: #555; --border: #e0e0e0; --accent: #2c5f8a; --code: #f4f5f6; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 1.8rem; color: var(--accent); }
+  h2 { font-size: 1.2rem; margin: 2rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.3rem; }
+  h3 { font-size: 1rem; color: var(--accent); margin: 1.5rem 0 0.4rem; }
+  .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
+  nav { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.3rem; margin-bottom: 2rem; }
+  nav ul { padding-left: 1.3rem; list-style: none; }
+  nav li { margin: 0.3rem 0; }
+  .concept { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+  pre { background: var(--code); border: 1px solid var(--border); border-radius: 5px; padding: 0.6rem 1rem; overflow-x: auto; font-size: 0.84rem; line-height: 1.5; margin: 0.4rem 0 0.8rem; white-space: pre-wrap; word-break: break-word; }
+  pre code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
+  .example { background: #e8f0f8; border-radius: 5px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.9rem; }
+  .example::before { content: '💡 '; font-weight: 700; }
+  .xref { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+  .warning { background: #fffdf0; border: 1px solid #c9a028; border-radius: 5px; padding: 0.6rem 1rem; margin-top: 0.6rem; font-size: 0.88rem; }
+  .warning::before { content: '⚠️ '; }
+  footer { margin-top: 3rem; text-align: center; font-size: 0.82rem; color: var(--muted); border-top: 2px solid var(--border); padding-top: 1.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Interfaz del Conocimiento — SHACL</h1>
+<p class="subtitle">SHApes Constraint Language &middot; Clase 5 &middot; MDS7205 &middot; U. de Chile</p>
+
+<nav>
+  <strong>Conceptos</strong>
+  <ul>
+    <li><a href="#c1">1. ¿Qué es SHACL?</a></li>
+    <li><a href="#c2">2. NodeShape y target</a></li>
+    <li><a href="#c3">3. sh:path y sh:datatype</a></li>
+    <li><a href="#c4">4. sh:alternativePath</a></li>
+    <li><a href="#c5">5. Cardinalidad: minCount / maxCount</a></li>
+    <li><a href="#c6">6. sh:class — tipo del valor</a></li>
+    <li><a href="#c7">7. Qualified Shapes</a></li>
+    <li><a href="#c8">8. sh:equals — igualdad entre propiedades</a></li>
+    <li><a href="#c9">9. Operadores lógicos: sh:or, sh:and, sh:not</a></li>
+    <li><a href="#c10">10. sh:pattern — expresiones regulares</a></li>
+    <li><a href="#c11">11. sh:in — valores enumerados</a></li>
+    <li><a href="#c12">12. Strings: minLength, maxLength, uniqueLang</a></li>
+  </ul>
+</nav>
+
+<section id="c1" class="concept">
+<h3>1. ¿Qué es SHACL?</h3>
+<p>SHApes Constraint Language es un lenguaje para <strong>validar</strong> grafos RDF contra un conjunto de condiciones (<em>shapes</em>). A diferencia de OWL (que infiere conocimiento nuevo), SHACL <strong>verifica</strong> que los datos cumplan restricciones.</p>
+<p>Produce un <strong>reporte de validación</strong>: conforme (<code>sh:conforms true</code>) o lista de violaciones (<code>sh:ValidationResult</code>).</p>
+<div class="example">Clase 5, diapositivas 10-11: «SHACL permite validar datos RDF contra shapes. Produce un validation report.»</div>
+</section>
+
+<section id="c2" class="concept">
+<h3>2. NodeShape y target</h3>
+<p>Un <code>sh:NodeShape</code> define restricciones para nodos. El <code>sh:targetClass</code> indica a qué instancias de clase se aplica.</p>
+<pre><code>ex:LaureateShape a sh:NodeShape ;
+    sh:targetClass nobel:Laureate .</code></pre>
+<p>Otros targets: <code>sh:targetNode</code> (un nodo específico), <code>sh:targetSubjectsOf</code> (sujetos de una propiedad), <code>sh:targetObjectsOf</code> (objetos de una propiedad).</p>
+<div class="example">Clase 5, diapositiva 15: «Una shape puede targetear instancias de clase, nodos específicos, sujetos u objetos.»</div>
+</section>
+
+<section id="c3" class="concept">
+<h3>3. sh:path y sh:datatype</h3>
+<p><code>sh:path</code> indica la propiedad a validar. <code>sh:datatype</code> restringe el tipo de dato del valor.</p>
+<pre><code>sh:property [
+    sh:path foaf:birthday ;
+    sh:datatype xsd:date ;
+]</code></pre>
+<p>Tipos comunes: <code>xsd:string</code>, <code>xsd:date</code>, <code>xsd:integer</code>, <code>rdf:langString</code>.</p>
+<div class="example">Clase 5, diapositiva 12: «Define una shape con sh:path y sh:datatype.»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p1">P1</a>, <a href="../interfaz_respuesta/index.html#p2">P2</a></div>
+</section>
+
+<section id="c4" class="concept">
+<h3>4. sh:alternativePath</h3>
+<p>Permite aplicar una misma restricción a <strong>múltiples propiedades alternativas</strong>. Útil cuando varias propiedades comparten la misma regla.</p>
+<pre><code>sh:path [ sh:alternativePath (foaf:givenName foaf:name foaf:familyName) ] ;
+sh:datatype xsd:string ;</code></pre>
+<p>El validador verifica la restricción contra <strong>todos</strong> los valores de <strong>cualquiera</strong> de las propiedades listadas.</p>
+<div class="example">Clase 5, diapositiva 18: «alternativePath en core constraints.»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p3">P3</a></div>
+</section>
+
+<section id="c5" class="concept">
+<h3>5. Cardinalidad: minCount / maxCount</h3>
+<p>Restringen el número de valores para una propiedad.</p>
+<pre><code>sh:property [
+    sh:path dbo:affiliation ;
+    sh:minCount 1 ;     # al menos 1 valor
+]</code></pre>
+<p><code>sh:minCount 0</code> hace la propiedad opcional. <code>sh:maxCount 1</code> la hace mono-valuada.</p>
+<div class="example">Clase 5, diapositivas 19-20: «Cardinality constraints: minCount, maxCount.»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p4">P4</a>, <a href="../interfaz_respuesta/index.html#p10">P10</a></div>
+</section>
+
+<section id="c6" class="concept">
+<h3>6. sh:class — tipo del valor</h3>
+<p>Restringe que el valor de una propiedad pertenezca a una clase específica.</p>
+<pre><code>sh:property [
+    sh:path dbo:affiliation ;
+    sh:class dbo:University ;   # el objeto debe ser Universidad
+]</code></pre>
+<p>A diferencia de <code>sh:datatype</code> (para literales), <code>sh:class</code> es para recursos/IRIs.</p>
+<div class="example">Clase 5, diapositiva 14: «sh:class ex:SoloArtist»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p4">P4</a></div>
+</section>
+
+<section id="c7" class="concept">
+<h3>7. Qualified Shapes</h3>
+<p><code>sh:qualifiedValueShape</code> + <code>sh:qualifiedMinCount</code>/<code>sh:qualifiedMaxCount</code> permiten contar cuántos valores cumplen una sub-shape, sin exigir que <strong>todos</strong> los valores la cumplan.</p>
+<pre><code>sh:property [
+    sh:path dbo:affiliation ;
+    sh:qualifiedValueShape [ sh:class dbo:University ] ;
+    sh:qualifiedMinCount 1 ;   # al menos 1 valor es Universidad
+]</code></pre>
+<div class="warning"><strong>Diferencia clave:</strong> <code>sh:class</code> exige que TODOS los valores sean del tipo. <code>qualifiedValueShape</code> solo exige que AL MENOS N valores lo sean. Las demás afiliaciones pueden ser empresas, ONGs, etc.</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p5">P5</a></div>
+</section>
+
+<section id="c8" class="concept">
+<h3>8. sh:equals — igualdad entre propiedades</h3>
+<p>Exige que dos propiedades tengan <strong>el mismo valor</strong>. Property Pair Constraint.</p>
+<pre><code>sh:property [
+    sh:path dbp:dateOfBirth ;
+    sh:equals foaf:birthday ;
+]</code></pre>
+<div class="warning">Si una de las propiedades no está definida, la validación falla: «Must have same values as ...». Para manejar valores ausentes se necesita <code>sh:or</code> (ver P7).</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p6">P6</a></div>
+</section>
+
+<section id="c9" class="concept">
+<h3>9. Operadores lógicos: sh:or, sh:not</h3>
+<p>Permiten combinar condiciones con lógica booleana.</p>
+<pre><code>sh:or (
+    [ sh:not [ sh:property [ sh:path dbp:dateOfBirth ; sh:minCount 1 ] ] ]
+    [ sh:not [ sh:property [ sh:path foaf:birthday ; sh:minCount 1 ] ] ]
+    [ sh:property [ sh:path dbp:dateOfBirth ; sh:equals foaf:birthday ] ]
+)</code></pre>
+<p>La disyunción tiene 3 ramas: (1) dateOfBirth ausente → OK, (2) birthday ausente → OK, (3) ambos presentes e iguales → OK. Si ambos presentes y distintos → violación.</p>
+<div class="example">Clase 5, diapositiva 18: «Logical: and, or, not, xone.»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p7">P7</a></div>
+</section>
+
+<section id="c10" class="concept">
+<h3>10. sh:pattern — expresiones regulares</h3>
+<p>Valida que un string coincida con una expresión regular.</p>
+<pre><code>sh:property [
+    sh:path foaf:name ;
+    sh:pattern "^[^\\d_]{2,}$" ;
+]</code></pre>
+<p>La regex <code>^[^\d_]{2,}$</code> significa: sin dígitos (<code>\d</code>), sin guion bajo (<code>_</code>), mínimo 2 caracteres (<code>{2,}</code>).</p>
+<div class="example">Clase 5, diapositiva 18: «String Values: pattern.»</div>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p8">P8</a></div>
+</section>
+
+<section id="c11" class="concept">
+<h3>11. sh:in — valores enumerados</h3>
+<p>Restringe el valor a una lista cerrada de opciones.</p>
+<pre><code>sh:property [
+    sh:path nobel:share ;
+    sh:in ( "1" "2" "3" "4" ) ;
+]</code></pre>
+<p>El valor debe ser exactamente uno de los listados.</p>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p9">P9</a></div>
+</section>
+
+<section id="c12" class="concept">
+<h3>12. Strings: minLength, maxLength, uniqueLang</h3>
+<p>Restricciones específicas para valores string.</p>
+<pre><code>sh:property [
+    sh:path nobel:motivation ;
+    sh:minLength 10 ;      # mínimo 10 caracteres
+    sh:maxCount 1 ;        # máximo 1 valor por idioma
+    sh:uniqueLang true ;   # no repetir idioma
+]</code></pre>
+<p><code>sh:uniqueLang true</code> asegura que no haya dos valores con el mismo language tag (ej. dos motivaciones en inglés).</p>
+<div class="xref">Usado en: <a href="../interfaz_respuesta/index.html#p10">P10</a></div>
+</section>
+
+<footer>
+  <p>Conceptos de la Clase 5: Modelling Constraints with SHACL &middot; MDS7205 &middot; 2026</p>
+  <p>Ver: <a href="../interfaz_respuesta/index.html">Interfaz con la Respuesta Correcta</a></p>
+</footer>
+</body>
+</html>
