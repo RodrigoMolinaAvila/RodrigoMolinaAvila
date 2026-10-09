@@ -94,7 +94,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 
 /* ── hero: máximo cuatro elementos de texto, dos líneas, CTA visible ── */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 1.4rem 4rem;position:relative}
-.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;max-width:17ch}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;max-width:20ch}
 .hero h1 em{font-style:italic;color:var(--accent)}
 .hero p.sub{max-width:46ch;margin:1.4rem auto 0;color:var(--ink-soft);font-size:1rem}
 .hero .chips{margin-top:2rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
@@ -121,8 +121,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 #origen .pin-space{height:175vh;position:relative}
 #origen .pin-stage{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;overflow:hidden}
 .origen-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:3rem;align-items:center;width:100%;max-width:1060px;margin:0 auto;padding:2rem 1.4rem}
-@media(max-width:860px){.origen-grid{grid-template-columns:1fr}}
 .origen-copy p{color:var(--ink-soft);font-size:1rem;max-width:58ch;margin-bottom:1.1rem}
+/* Biografía larga: 3 columnas dentro del marco fijo cuando cabe.
+   Si no cabe, JS agrega .origen-flow y la sección scrollea normalmente. */
+@media(min-width:900px){
+  #origen .origen-grid{grid-template-columns:1fr;gap:1.4rem;max-width:1140px}
+  #origen .origen-copy{columns:3;column-gap:2.6rem}
+  #origen .origen-copy h2{column-span:all;margin-bottom:.9rem}
+  #origen .origen-copy p{font-size:.88rem;line-height:1.5;margin:0 0 .8rem;max-width:none;
+    break-inside:avoid;-webkit-column-break-inside:avoid}
+  #origen .origen-copy blockquote{column-span:all;margin:.8rem 0 0;font-size:1.02rem}
+  #origen .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem 1.3rem}
+  #origen .fact{max-width:none}
+  #origen .fact b{font-size:.7rem}
+  #origen .fact span{font-size:.8rem;line-height:1.35}
+}
+/* Modo flujo: sin pin, una columna, scroll natural */
+#origen.origen-flow .pin-space{height:auto}
+#origen.origen-flow .pin-stage{position:static;min-height:0;overflow:visible;padding:3.5rem 0}
+#origen.origen-flow .origen-copy{columns:1}
+#origen.origen-flow .origen-copy p{font-size:.95rem;max-width:68ch}
+#origen.origen-flow .facts{flex-direction:column;gap:.7rem}
+#origen.origen-flow .fact{max-width:none}
 .origen-copy strong{color:var(--ink);font-weight:600}
 .origen-copy blockquote{border-left:2px solid var(--accent);padding:.2rem 0 .2rem 1rem;margin:1.2rem 0;font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink);font-style:italic}
 .facts{display:flex;flex-direction:column;gap:.7rem}
@@ -284,6 +304,16 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 .roles-h{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
   color:var(--accent);margin:0 0 .9rem}
 @media(max-width:760px){.roles{grid-template-columns:1fr}}
+
+/* ── Contador de visitas: discreto, arriba a la izquierda ── */
+#visitas{position:fixed;top:3.65rem;left:1.3rem;z-index:99;
+  font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.06em;
+  color:var(--ink-soft);opacity:.5;transition:opacity .25s var(--ease);pointer-events:none;
+  display:flex;align-items:center;gap:.35rem}
+#visitas:hover{opacity:.9}
+#visitas::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.55;flex:none}
+#visitas:empty{display:none}
+@media(max-width:900px){#visitas{display:none}}
 </style>
 </head>
 <body>
@@ -325,8 +355,8 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 <div class="content">
 
 <header class="hero" id="top">
-  <h1>Cada vida es un <em>grafo</em>: nodos que fuimos, aristas que nos hicieron.</h1>
-  <p class="sub">Data scientist y sociólogo computacional. Magíster en Ciencia de Datos (FCFM, U. de Chile), con trabajo en IDIA e IMFD.</p>
+  <h1>Rodrigo Molina Ávila</h1>
+  <p class="sub">Data Scientist · Sociólogo Computacional</p>
   <div class="chips">
     <a class="chip" href="https://interrogandolaacademia.cl/" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z"/></svg>interrogandolaacademia.cl</a>
     <a class="chip" href="https://idia.uchile.cl/quienes-somos/rodrigo-molina/" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 .01 20A10 10 0 0 0 12 2zm6.93 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.7 15.7 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>Perfil IDIA ↗</a>
@@ -1212,6 +1242,44 @@ function toggleTheme(){document.body.parentElement.setAttribute('data-theme',doc
 document.getElementById('btn-es').style.background='var(--accent)';
 document.getElementById('btn-es').style.color='var(--accent-ink)';
 applyLang('es');
+</script>
+<script>
+/* ── Origen: el pin solo si la biografía cabe en pantalla ── */
+(function(){
+  const sec=document.getElementById('origen');
+  if(!sec) return;
+  const grid=sec.querySelector('.origen-grid');
+  if(!grid) return;
+  function ajustar(){
+    sec.classList.remove('origen-flow');
+    const necesita=grid.getBoundingClientRect().height+8;
+    if(necesita>window.innerHeight) sec.classList.add('origen-flow');
+  }
+  ajustar();
+  window.addEventListener('resize', ajustar);
+  window.addEventListener('load', ajustar);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(ajustar);
+  setTimeout(ajustar,600);
+})();
+</script>
+<div id="visitas" title="Visitas a este sitio"></div>
+
+<script>
+/* ── Contador de visitas (abacus.jasoncameron.dev) ── */
+(function(){
+  var el=document.getElementById('visitas'); if(!el) return;
+  var KEY='rodrigomolinaavila/portafolio';
+  var contada=false;
+  try{ contada=sessionStorage.getItem('visita-contada')==='1'; }catch(e){}
+  var url='https://abacus.jasoncameron.dev/'+(contada?'get/':'hit/')+KEY;
+  if(!contada){ try{ sessionStorage.setItem('visita-contada','1'); }catch(e){} }
+  fetch(url,{cache:'no-store'}).then(function(r){ return r.json(); }).then(function(d){
+    if(d&&typeof d.value==='number'){
+      var n=new Intl.NumberFormat('es-CL').format(d.value);
+      el.textContent=n+(d.value===1?' visita':' visitas');
+    }
+  }).catch(function(){});
+})();
 </script>
 </body>
 </html>
