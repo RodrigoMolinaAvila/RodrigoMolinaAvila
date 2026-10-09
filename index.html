@@ -209,13 +209,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 .aula .meta p{color:var(--ink-soft);font-size:.8rem;margin-top:.25rem}
 
 /* raíl horizontal (device: pan) para las interfaces */
-.pan-space{height:300vh;position:relative}
-.pan-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
-.pan-head{position:absolute;top:calc(50% - 42vh);left:0;right:0;padding:0 1.4rem}
-.pan-rail{display:flex;gap:1.2rem;will-change:transform;padding:0 1.4rem}
-.pan-rail .aula{flex:none;width:clamp(16rem,26vw,23rem)}
-.pan-note{flex:none;width:clamp(14rem,22vw,20rem);align-self:center;color:var(--ink-soft);font-size:.9rem;padding-right:2rem}
-@media(prefers-reduced-motion:reduce){.pan-space{height:auto}.pan-stage{position:static;height:auto}.pan-rail{overflow-x:auto;transform:none!important}}
+/* Los laboratorios usan la misma grilla que los controles de lectura. */
+.labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:1.1rem}
 
 /* controles FDS con preview */
 .fds{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:1.1rem}
@@ -541,41 +536,31 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <a href="https://interrogandolaacademia.cl/" target="_blank" style="font-size:.84rem;font-weight:600">Ver plataforma ↗</a>
     </div>
     <h3 class="group-h reveal">Interfaces de laboratorio, MDS7205 Grafos de Conocimiento (U. de Chile)</h3>
-    <p class="lead reveal" style="margin-bottom:1.2rem">Como ayudante del curso construí una interfaz interactiva por laboratorio: el concepto, la sintaxis y el ejercicio en una sola página. El raíl avanza lateralmente con el scroll; clic abre la interfaz completa.</p>
-  </div>
-
-  <div class="pan-space">
-    <div class="pan-stage">
-      <div class="pan-head">
-        <h3 style="font-family:'Fraunces',serif;font-size:1.3rem">Grafos de Conocimiento, laboratorio a laboratorio</h3>
-      </div>
-      <div class="pan-rail" id="panRail">
-        <a class="aula" href="assets/labs/lab2/index.html" target="_blank">
+    <p class="lead reveal" style="margin-bottom:1.4rem">Como ayudante del curso construí una interfaz interactiva por laboratorio: el concepto, la sintaxis y el ejercicio en una sola página. Clic abre la interfaz completa.</p>
+    <div class="labs">
+        <a class="aula reveal d0" href="assets/labs/lab2/index.html" target="_blank">
           <div class="lang">OWL · Web Ontology Language</div>
           <img src="assets/lab2.webp" alt="Laboratorio de conceptos OWL" width="640" height="400">
           <div class="meta"><b>Conceptos OWL</b><p>Simetría, transitividad, cadenas de propiedades y mundo abierto: lo que hace razonable un grafo.</p></div>
         </a>
-        <a class="aula" href="assets/labs/lab3/index.html" target="_blank">
+        <a class="aula reveal d1" href="assets/labs/lab3/index.html" target="_blank">
           <div class="lang">SHACL</div>
           <img src="assets/lab3.webp" alt="Laboratorio SHACL" width="640" height="400">
           <div class="meta"><b>Validar grafos con SHACL</b><p>Formas y restricciones: comprobar que los datos cumplen lo que la ontología promete.</p></div>
         </a>
-        <a class="aula" href="assets/labs/lab4/index.html" target="_blank">
+        <a class="aula reveal d2" href="assets/labs/lab4/index.html" target="_blank">
           <div class="lang">SPARQL · Wikidata</div>
           <img src="assets/lab4.webp" alt="Laboratorio SPARQL en Wikidata" width="640" height="400">
           <div class="meta"><b>SPARQL en Wikidata</b><p>Consultas contra el grafo del conocimiento común: millones de entidades a una query de distancia.</p></div>
         </a>
-        <a class="aula" href="assets/labs/lab5/index.html" target="_blank">
+        <a class="aula reveal d3" href="assets/labs/lab5/index.html" target="_blank">
           <div class="lang">Cypher · GQL</div>
           <img src="assets/lab5.webp" alt="Laboratorio Cypher/GQL" width="640" height="400">
           <div class="meta"><b>Cypher y GQL</b><p>Dos lenguajes, un mismo grafo: de Neo4j al estándar ISO, lado a lado.</p></div>
         </a>
-        <div class="pan-note">Cuatro interfaces, cuatro lenguajes: OWL para razonar, SHACL para validar, SPARQL y Cypher para preguntar.</div>
-      </div>
     </div>
-  </div>
+    <p class="lead" style="margin-top:1.4rem;font-size:.9rem">Cuatro interfaces, cuatro lenguajes: OWL para razonar, SHACL para validar, SPARQL y Cypher para preguntar.</p>
 
-  <div class="chapter-inner">
     <h3 class="group-h reveal" style="margin-top:2.6rem">Clases de ayudantía, Fundamentos de la Sociología (Bachillerato UDP)</h3>
     <p class="lead reveal" style="margin-bottom:1.4rem">Cinco clases para preparar los controles de lectura del primer semestre 2026: cada una con sus lecturas, sus autores y el repaso listo para aplicar.</p>
     <div class="fds">
@@ -1020,25 +1005,6 @@ drawBG();
 
 
 // ── device pan: raíl horizontal de aulas ──
-const panSpace=document.querySelector(".pan-space");
-const panRail=document.getElementById("panRail");
-function updatePan(){
-  if(!panSpace||!panRail)return;
-  const r=panSpace.getBoundingClientRect();
-  const total=r.height-window.innerHeight;
-  const p=Math.min(1,Math.max(0,-r.top/(total||1)));
-  const travel=Math.max(0,panRail.scrollWidth-window.innerWidth);
-  const overshoot=travel*.06;
-  panRail.style.transform=`translateX(${-p*(travel+overshoot)}px)`;
-  const items=[...panRail.children];
-  items.forEach((it,i)=>{
-    if(i===0){it.style.opacity=1;return;}
-    const start=.12+i*(.8/items.length);
-    const local=Math.min(1,Math.max(0,(p-start)/.12));
-    it.style.opacity=.55+.45*local;
-  });
-}
-
 // ── reveals ──
 if('IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
@@ -1060,7 +1026,6 @@ document.querySelectorAll(".tool").forEach(c=>{
 let ticking=false;
 function onScroll(){
   updateRail();
-  updatePan();
   ticking=false;
 }
 window.addEventListener("scroll",()=>{if(!ticking){requestAnimationFrame(()=>{onScroll();ticking=false;});ticking=true;}},{passive:true});
