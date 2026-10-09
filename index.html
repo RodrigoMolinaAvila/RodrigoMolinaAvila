@@ -258,6 +258,32 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   .kin>span{transform:none!important;transition:none}
   .hero h1 em{animation:none}
 }
+
+/* ── Formación: cursos del magíster ── */
+.cursos{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1rem;margin-top:1.6rem}
+.curso{background:var(--surface);border:1px solid var(--border);border-top-color:var(--edge);border-radius:12px;
+  padding:1.05rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:var(--shadow);
+  transition:border-color .25s var(--ease),transform .25s var(--ease)}
+.curso:hover{border-color:var(--accent);transform:translateY(-2px)}
+.curso-head{display:flex;align-items:baseline;gap:.55rem}
+.curso-n{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:var(--accent);flex:none}
+.curso h3{margin:0;font-family:'Fraunces',serif;font-size:1.02rem;line-height:1.25;font-weight:600}
+.curso-p{margin:0;font-size:.85rem;color:var(--ink-soft);line-height:1.5}
+.curso-w{margin:0;font-size:.82rem;color:var(--ink-soft);line-height:1.5;font-style:italic;
+  border-left:2px solid var(--accent);padding-left:.7rem}
+.curso .tokens{margin-top:.1rem}
+.curso .tok{font-size:.67rem;padding:.1rem .42rem}
+@media(max-width:760px){.cursos{grid-template-columns:1fr}}
+
+/* ── Aulas: listado de docencia ── */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:.55rem 1.6rem;margin:0 0 2rem}
+.role{display:flex;gap:.75rem;align-items:baseline;font-size:.86rem;line-height:1.4}
+.role b{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--accent);flex:none;min-width:4.6rem}
+.role span{color:var(--ink);display:block}
+.role i{color:var(--ink-soft);font-style:normal;font-size:.79rem;display:block}
+.roles-h{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 .9rem}
+@media(max-width:760px){.roles{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -271,6 +297,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   <a href="#investigacion" data-ch="investigacion"><span>Investigación</span><i></i></a>
   <a href="#taller" data-ch="taller"><span>El taller</span><i></i></a>
   <a href="#aulas" data-ch="aulas"><span>Aulas</span><i></i></a>
+  <a href="#formacion" data-ch="formacion"><span>Formación</span><i></i></a>
   <a href="#publicaciones" data-ch="publicaciones"><span>Publicaciones</span><i></i></a>
   <a href="#habilidades" data-ch="habilidades"><span>Habilidades</span><i></i></a>
   <a href="#cv" data-ch="cv"><span>CV</span><i></i></a>
@@ -282,7 +309,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   <div class="nav-right">
     <div class="nav-links" id="navLinks">
       <a href="#origen">Sobre mí</a><a href="#trayectoria">Trayectoria</a>
-      <a href="#investigacion">Investigación</a><a href="#taller">El taller</a>
+      <a href="#investigacion">Investigación</a><a href="#taller">El taller</a><a href="#formacion">Formación</a>
       <a href="#publicaciones">Publicaciones</a><a href="#habilidades">Habilidades</a><a href="#cv">CV</a><a href="#contacto">Contacto</a>
     </div>
     <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema" title="Claro / oscuro">◐</button>
@@ -298,8 +325,8 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 <div class="content">
 
 <header class="hero" id="top">
-  <h1>Rodrigo Molina Ávila</h1>
-  <p class="sub">Data scientist y sociólogo computacional en IDIA, IMFD y la Universidad de Chile.</p>
+  <h1>Cada vida es un <em>grafo</em>: nodos que fuimos, aristas que nos hicieron.</h1>
+  <p class="sub">Data scientist y sociólogo computacional. Magíster en Ciencia de Datos (FCFM, U. de Chile), con trabajo en IDIA e IMFD.</p>
   <div class="chips">
     <a class="chip" href="https://interrogandolaacademia.cl/" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z"/></svg>interrogandolaacademia.cl</a>
     <a class="chip" href="https://idia.uchile.cl/quienes-somos/rodrigo-molina/" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 .01 20A10 10 0 0 0 12 2zm6.93 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.7 15.7 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>Perfil IDIA ↗</a>
@@ -315,10 +342,14 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
         <div class="origen-copy">
           <h2 class="chapter-word" style="margin-bottom:1.2rem">Origen</h2>
           <p>Partí estudiando <strong>Sociología</strong> en la Universidad Andrés Bello con una pregunta simple e insidiosa: por qué la gente termina haciendo lo que hace. Salí con título y Licenciatura con Distinción, y una sospecha que nunca me abandonó: casi nada de lo social es casualidad.</p>
-          <p>La sociología de campo llegó temprano. En <strong>2018</strong>, práctica profesional en <strong>Gendarmería de Chile</strong>: bases de datos, instrumentos y pruebas estadísticas, y trabajo de campo dentro de las cárceles Santiago 1 y CCP Puente Alto. Ver al Estado cara a cara cambia cómo uno lee las estadísticas.</p>
-          <p>Entre <strong>2021 y 2023</strong>, tres proyectos de investigación: Grounded Theory para la desigualdad geográfica en el FONDECYT Regular 11200602, una base de 48.000+ publicaciones sobre think tanks en el Postdoc 3210579, y la Convención Constituyente con el Mini COES: etnografía en el Ex Congreso y redes de expertos presentadas en el IX Congreso COES.</p>
-          <p>En <strong>2024</strong>, el salto computacional: Magíster en Ciencia de Datos en la FCFM y Data Scientist en la <strong>IDIA</strong>, con vínculos al IMFD. Mi tesis: un grafo de conocimiento de 3.143 becarios/as ANID que pregunta si el género y la clase social de origen estructuran la producción científica chilena. Aprobada, con paper en camino y plataforma pública.</p>
-          <p>En <strong>2026</strong>: consultoría cualitativa para el nuevo Magíster en IA, docencia en Grafos de Conocimiento e Information Retrieval, ayudantías en Fundamentos de la Sociología UDP, y este sitio, que es también un grafo.</p>
+          <p>La sociología de campo llegó temprano. En <strong>2018</strong>, práctica profesional en <strong>Gendarmería de Chile</strong>, en el Departamento de Clasificación y Segmentación de la Dirección Nacional: bases de datos, instrumentos y pruebas estadísticas, y trabajo de campo dentro de las cárceles Santiago 1 y CCP Puente Alto. Ver al Estado cara a cara cambia cómo uno lee las estadísticas. Ahí aprendí que un dato administrativo es, antes que nada, una decisión sobre personas.</p>
+          <p>Entre <strong>2021 y 2023</strong> trabajé en tres proyectos que me enseñaron a sostener una pregunta durante años. Grounded Theory para la desigualdad geográfica en el FONDECYT Regular 11200602. Una base de 48.000+ publicaciones sobre think tanks chilenos en el Postdoc 3210579, donde descubrí que podía automatizar lo que antes se hacía a mano. Y la Convención Constituyente con el Mini COES: entrevistas, etnografía en el Ex Congreso y redes de expertos, presentadas en el IX Congreso COES.</p>
+          <p>En paralelo llegaron mis primeras ayudantías en la Facultad de Gobierno de la Universidad de Chile: Política Latinoamericana y Comportamiento Humano en la Organización con el profesor Luis Garrido Vergara, y Análisis Empírico de Políticas Públicas con Juan Carlos Cortázar. Enseñar me obligó a ordenar lo que creía saber.</p>
+          <p>En <strong>2024</strong> llegó el salto. Entré al Magíster en Ciencia de Datos de la FCFM y, casi al mismo tiempo, a la Iniciativa de Datos e Inteligencia Artificial (<strong>IDIA</strong>), con vínculos al Instituto Milenio Fundamento de los Datos (IMFD). Pasé de analizar datos a construirlos: pipelines, grafos, modelos. La sociología me había dado las preguntas; la ingeniería me dio la infraestructura para responderlas a escala.</p>
+          <p>Mi tesis fue el proyecto que unió las dos mitades. Construí un grafo de conocimiento en Neo4j con 16 tipos de nodos y 15 tipos de relaciones —más de tres millones de aristas de coautoría— para reconstruir la trayectoria de 3.143 becarios y becarias doctorales ANID. Sobre eso corrí detección de comunidades, métricas de centralidad validadas contra modelos nulos y topic modeling con BERTopic sobre 26.071 publicaciones. La pregunta de fondo seguía siendo sociológica: si el género y la clase social de origen estructuran lo que la ciencia chilena produce. La tesis se defendió, el paper se aceptó en <strong>AMW 2026</strong> como primer autor, y la plataforma quedó pública y navegable.</p>
+          <p>Entre medio tendí el puente hacia el mundo aplicado. En mayo de 2025 fui consultor cuantitativo para Fab Consulting en la evaluación del Programa de Valorización a la Investigación de ANID, con propuesta técnica para la Subsecretaría de Ciencia, Tecnología, Conocimiento e Innovación. Y en 2026, consultoría cualitativa para el nuevo Magíster Profesional en IA de la FCFM: focus group con egresados, entrevistas a la industria y un pipeline completo de diarización, transcripción y NLP con evidencia navegable de punta a punta.</p>
+          <p>La docencia creció conmigo. En 2026 fui ayudante de Grafos de Conocimiento en el Magíster en Ciencia de Datos, de Fundamentos de la Sociología en el Bachillerato de la UDP, y de Information Retrieval en el Diplomado en Ciencias de la Computación. Desde agosto de 2026 soy <strong>Profesor Auxiliar de Procesamiento de Lenguaje Natural</strong> en ese mismo diplomado: mi primer curso a cargo. También co-guíe la memoria de título de Matías Vega, que terminó en una plataforma pública de datos sobre financiamiento de la ciencia en Chile.</p>
+          <p>Hoy cierro un ciclo y abro otro. La sociología me enseñó a preguntar; la ciencia de datos, a responder con evidencia; la docencia, a explicarlo; y la consultoría, a que sirva. Trabajo en la intersección entre grafos de conocimiento, procesamiento de lenguaje natural e ingeniería de datos, con una convicción que no ha cambiado desde 2014: casi nada de lo social es casualidad, y casi todo se puede modelar.</p>
           <blockquote>«La sociología me dio las preguntas; los datos, la disciplina para responderlas.»</blockquote>
         </div>
         <div class="facts">
@@ -326,7 +357,8 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
           <div class="fact"><b>2018</b><span>Trabajo de campo en cárceles (Gendarmería de Chile)</span></div>
           <div class="fact"><b>2021–23</b><span>Tres proyectos FONDECYT + Mini COES</span></div>
           <div class="fact"><b>2024</b><span>MSc Data Science FCFM + IDIA / IMFD</span></div>
-          <div class="fact"><b>2026</b><span>Tesis aprobada · consultoría · docencia</span></div>
+          <div class="fact"><b>2025–26</b><span>Consultoría ANID e IDIA · docencia</span></div>
+          <div class="fact"><b>2026</b><span>Tesis defendida · paper aceptado en AMW 2026</span></div>
         </div>
       </div>
     </div>
@@ -441,6 +473,12 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
         <p>Mi primera creación en HTML: población indígena y afrodescendiente de Latinoamérica, país por país.</p></div>
         <div class="tool-shot"><img src="assets/site-mapviz.webp" alt="MapViz" loading="lazy"></div>
       </a>
+      <a class="tool reveal" href="assets/panorama-palta.html" target="_blank">
+        <div><span class="tag">Viz · Mercado</span>
+        <h3>Panorama Competitivo · Palta Chilena</h3>
+        <p>Un deck autocontenido de 25 láminas sobre el mercado de la palta: scraping de ODEPA y Paltas de Chile, mapas interactivos en D3.js y análisis competitivo de exportadores.</p></div>
+        <div class="tool-shot"><img src="assets/site-panorama-palta.webp" alt="Panorama Competitivo · Palta Chilena" loading="lazy"></div>
+      </a>
     </div>
   </div>
 </section>
@@ -453,6 +491,18 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <span class="chapter-orn" data-orn="bipartite"></span>
     </div>
 
+
+    <h3 class="roles-h reveal">Docencia</h3>
+    <div class="roles reveal">
+      <div class="role"><b>2026</b><div><span>Profesor Auxiliar — Procesamiento de Lenguaje Natural</span><i>Diplomado en Ciencias de la Computación, FCFM</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Information Retrieval</span><i>Diplomado en Ciencias de la Computación, FCFM</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Grafos de Conocimiento</span><i>Magíster en Ciencia de Datos, FCFM</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Fundamentos de la Sociología</span><i>Bachillerato, Universidad Diego Portales</i></div></div>
+      <div class="role"><b>2025–26</b><div><span>Co-guía de memoria de título</span><i>DCC, FCFM, Universidad de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Política Latinoamericana</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Comportamiento Humano en la Organización</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Análisis Empírico de Políticas Públicas</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
+    </div>
 
     <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-top-color:var(--edge);border-radius:14px;padding:1.5rem 1.6rem;box-shadow:var(--shadow);margin-bottom:2.2rem">
       <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)">Co-guía de memoria de título · DCC, FCFM U. de Chile</span>
@@ -594,6 +644,94 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   </div>
 </section>
 
+
+<section id="formacion" class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-head reveal">
+      <span class="chapter-word">Formación</span>
+      <span class="chapter-desc">El magíster, curso por curso: qué aprendí y qué construí en cada uno.</span>
+      <span class="chapter-orn" data-orn="tree"></span>
+    </div>
+    <p class="lead reveal">Trece cursos entre 2024 y 2026 en la Facultad de Ciencias Físicas y Matemáticas de la Universidad de Chile. No los listo como materias aprobadas, sino por lo que cada uno dejó: los métodos, las herramientas y el trabajo real que salió de ahí.</p>
+    <div class="cursos">
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">01</span><h3>Minería de datos</h3></div>
+        <p class="curso-p">Todos los métodos clásicos del análisis de datos y sus validaciones.</p>
+        <p class="curso-w">Trabajé con la Encuesta Nacional de Empleo: reducción de dimensionalidad, clustering y modelos ensamblados sobre datos reales.</p>
+        <div class="tokens"><span class="tok">k-means</span><span class="tok">SVM</span><span class="tok">DBSCAN</span><span class="tok">PCA</span><span class="tok">t-SNE</span><span class="tok">UMAP</span><span class="tok">Random Forest</span><span class="tok">XGBoost</span><span class="tok">CatBoost</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">02</span><h3>Estadística</h3></div>
+        <p class="curso-p">Estadística inferencial: distribuciones normal, binomial, beta, Poisson y Dirichlet; OLS, MLE y los supuestos de OLS.</p>
+        <p class="curso-w">Análisis del lobby de la Cámara de Diputados y Senadores en series de tiempo.</p>
+        <div class="tokens"><span class="tok">normal</span><span class="tok">binomial</span><span class="tok">beta</span><span class="tok">Poisson</span><span class="tok">Dirichlet</span><span class="tok">OLS</span><span class="tok">MLE</span><span class="tok">supuestos OLS</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">03</span><h3>Bases de datos</h3></div>
+        <p class="curso-p">Métodos, términos y conceptos clave de las bases de datos SQL.</p>
+        <div class="tokens"><span class="tok">INNER / OUTER JOIN</span><span class="tok">LEFT / RIGHT JOIN</span><span class="tok">MERGE</span><span class="tok">vistas</span><span class="tok">COUNT</span><span class="tok">nociones de memoria</span><span class="tok">construcción de queries</span><span class="tok">mejores prácticas</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">04</span><h3>Aprendizaje de máquinas</h3></div>
+        <p class="curso-p">Las matemáticas y los conceptos teóricos base de la inteligencia computacional.</p>
+        <div class="tokens"><span class="tok">SGD</span><span class="tok">pseudoinversa de Moore-Penrose</span><span class="tok">álgebra lineal</span><span class="tok">Bayes</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">05</span><h3>Proyecto de ciencia de datos</h3></div>
+        <p class="curso-p">Trabajo directo con el INE y la Encuesta Nacional de Empleo.</p>
+        <p class="curso-w">Construí un diagnóstico de outliers para el modelo ARIMA X13-SEATS de la tasa de desocupación.</p>
+        <div class="tokens"><span class="tok">INE</span><span class="tok">ARIMA X13-SEATS</span><span class="tok">diagnóstico de outliers</span><span class="tok">series de tiempo</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">06</span><h3>Laboratorio de programación científica</h3></div>
+        <p class="curso-p">Programación y ciencia de datos con foco en calidad, rigor y fundamentos teóricos.</p>
+        <p class="curso-w">Un recorrido por las mejores prácticas que uso hasta hoy: evitar el data leakage, pipelines reproducibles y monitoreo de drift.</p>
+        <div class="tokens"><span class="tok">POO en Python</span><span class="tok">Plotly</span><span class="tok">pipelines scikit-learn</span><span class="tok">anti data-leakage</span><span class="tok">Prophet</span><span class="tok">XGBoost</span><span class="tok">Optuna con pruning</span><span class="tok">SHAP</span><span class="tok">Docker</span><span class="tok">Airflow (data drift)</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">07</span><h3>Análisis de datos e inferencia causal</h3></div>
+        <p class="curso-p">Las nociones más profundas de la inferencia estadística, a nivel causal.</p>
+        <p class="curso-w">Interpretación de sesgo de variable omitida, sesgo de selección y variables latentes sobre casos reales.</p>
+        <div class="tokens"><span class="tok">ATE</span><span class="tok">CATE</span><span class="tok">sesgo de variable omitida</span><span class="tok">sesgo de selección</span><span class="tok">variables latentes</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">08</span><h3>Taller de visualización de datos</h3></div>
+        <p class="curso-p">El uso y la relevancia del storytelling con datos, con las herramientas que uso hasta el día de hoy.</p>
+        <p class="curso-w">Perfeccioné el dashboard de la Convención Constitucional que había construido como asistente de investigación.</p>
+        <div class="tokens"><span class="tok">D3.js</span><span class="tok">Power BI</span><span class="tok">storytelling</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">09</span><h3>Grafos de conocimiento — La luz</h3></div>
+        <p class="curso-p">Desde la base hasta lo avanzado: ontologías, validación, embeddings y consulta de grafos.</p>
+        <p class="curso-w">Transformé mi trabajo de asistente de investigación sobre clase social y género en un property graph multi-fuente. De aquí salió la tesis.</p>
+        <div class="tokens"><span class="tok">RDF</span><span class="tok">RDFS</span><span class="tok">OWL</span><span class="tok">SHACL</span><span class="tok">graph embeddings</span><span class="tok">Neo4j</span><span class="tok">property graphs</span><span class="tok">centralidad</span><span class="tok">GQL</span><span class="tok">SPARQL</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">10</span><h3>Seminario de tesis</h3></div>
+        <p class="curso-p">Vínculo directo con los espacios académicos, insertado en la Iniciativa de Datos e Inteligencia Artificial.</p>
+        <p class="curso-w">Construcción de la tesis junto a los profesionales del IDIA, semana a semana.</p>
+        <div class="tokens"><span class="tok">IDIA</span><span class="tok">tesis</span><span class="tok">investigación aplicada</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">11</span><h3>Business analytics</h3></div>
+        <p class="curso-p">Perfeccionamiento del storytelling de datos y de Power BI.</p>
+        <p class="curso-w">Construí un dashboard de más de 8 paneles sobre los becarios ANID, a partir de mi trabajo como asistente de investigación.</p>
+        <div class="tokens"><span class="tok">Power BI</span><span class="tok">DAX</span><span class="tok">storytelling</span><span class="tok">dashboards</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">12</span><h3>Procesamiento del lenguaje natural — La fuerza</h3></div>
+        <p class="curso-p">Todas las nociones matemáticas detrás del lenguaje.</p>
+        <div class="tokens"><span class="tok">bag of words</span><span class="tok">TF-IDF</span><span class="tok">LDA</span><span class="tok">lematización</span><span class="tok">stemming</span><span class="tok">similitud coseno</span><span class="tok">RNN</span><span class="tok">embeddings</span><span class="tok">LSTM</span><span class="tok">softmax</span><span class="tok">tokenización</span></div>
+      </article>
+      <article class="curso reveal">
+        <div class="curso-head"><span class="curso-n">13</span><h3>Web de datos</h3></div>
+        <p class="curso-p">Profundización en Web 3: motores de Wikidata, datos federados y enlazados.</p>
+        <div class="tokens"><span class="tok">Web 3</span><span class="tok">Wikidata</span><span class="tok">datos federados</span><span class="tok">datos enlazados</span><span class="tok">SPARQL</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <section id="habilidades" class="chapter">
   <div class="chapter-inner">
     <div class="chapter-head reveal">
@@ -617,6 +755,10 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <div class="skill-block reveal">
         <b>NLP e IA generativa</b>
         <div class="tokens"><span class="tok">BERTopic</span><span class="tok">SBERT / Transformers</span><span class="tok">Whisper</span><span class="tok">diarización</span><span class="tok">RAG (Chroma, FAISS)</span><span class="tok">Ollama</span><span class="tok">prompt engineering</span><span class="tok">APIs LLM</span></div>
+      </div>
+      <div class="skill-block reveal">
+        <b>Harness Engineering &amp; APIs de IA</b>
+        <div class="tokens"><span class="tok">Claude Code</span><span class="tok">omp</span><span class="tok">MCP</span><span class="tok">OpenRouter</span><span class="tok">DeepSeek harness</span><span class="tok">APIs de IA</span><span class="tok">RAG</span><span class="tok">prompt engineering</span><span class="tok">LLMs locales (Ollama)</span><span class="tok">fine-tuning / LoRA</span></div>
       </div>
       <div class="skill-block reveal">
         <b>Ingeniería de datos</b>
@@ -655,9 +797,9 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
     </div>
     <div class="reveal">
       <div class="pub">
-        <span class="venue">AMW 2026 · CEUR-WS</span><span class="status">En revisión</span>
+        <span class="venue">AMW 2026 · CEUR-WS</span><span class="status">Aceptado</span>
         <h3>Untangling the Academic Network: Analyzing Scientific Trajectories with Graphs and NLP</h3>
-        <p>R. Molina Ávila, S. Ferrada Aliaga (IDIA, IMFD).</p>
+        <p>R. Molina Ávila, S. Ferrada Aliaga (IDIA, IMFD). <a href="https://amw2026.github.io/accepted-papers" target="_blank" rel="noopener">Lista de aceptados ↗</a></p>
       </div>
       <div class="pub">
         <span class="venue">Latin American Research Review · Cambridge UP</span><span class="status">Reconocimiento</span>
@@ -690,7 +832,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       </a>
       <a class="cv-card reveal d2" href="assets/cv_chino.pdf" target="_blank">
         <img src="assets/cv-zh-thumb.png" alt="中文简历" loading="lazy">
-        <div class="meta"><b>中文</b><small>PDF · 3 页</small></div>
+        <div class="meta"><b>中文</b><small>PDF · 4 页</small></div>
       </a>
   </div>
 </div>
@@ -705,7 +847,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <h2 style="margin:0;font-family:'Fraunces',serif;font-size:1.8rem">Hablemos.</h2>
     </div>
     <div class="socials">
-      <a class="chip" href="mailto:rodmolina@ug.uchile.cl"><svg class="ic" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Email</a>
+      <a class="chip" href="mailto:rodmolina.avila@gmail.com"><svg class="ic" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Email</a>
       <a class="chip" href="https://www.linkedin.com/in/rodmolinaavila" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 17.34V10.2H5.67v7.14h2.67zM7 9a1.56 1.56 0 1 0 0-3.12A1.56 1.56 0 0 0 7 9zm12.33 8.34v-4.1c0-2.2-1.17-3.22-2.73-3.22-1.26 0-1.83.7-2.14 1.18v-1.01h-2.67c.04.76 0 7.14 0 7.14h2.67v-3.99c0-.24.02-.48.09-.65.19-.48.63-.98 1.37-.98.96 0 1.35.74 1.35 1.82v3.81h2.06z"/></svg>LinkedIn</a>
       <a class="chip" href="https://github.com/RodrigoMolinaAvila" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a>
       <a class="chip" href="https://orcid.org/0009-0006-0648-0799" target="_blank"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 .01 20A10 10 0 0 0 12 2zM8.5 7.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM7.5 10.5h2V17h-2v-6.5zm4 0h3.2c1.6 0 2.8 1.2 2.8 3.2S15.3 17 13.7 17h-3.2v-6.5zm1.4 1.4v3.7h1.6c1 0 1.7-.7 1.7-1.8 0-1.2-.7-1.9-1.7-1.9h-1.6z"/></svg>ORCID</a>
@@ -950,8 +1092,8 @@ const EVENTS=[
  {id:"doc_ap",yr:2022.75,cat:"teach",t:"Análisis Políticas Públicas",d:"Ayudante, Análisis Empírico de Políticas Públicas (Dr. Juan Carlos Cortázar), 2° sem 2022."},
  {id:"ixcoes",yr:2022.85,cat:"pub",t:"IX Conferencia COES",d:"Ponente: «El Rol del Conocimiento Experto en la Convención Constituyente», con R. Chiappa y M. González Hernando. Noviembre 2022, UDP."},
  {id:"postdoc",yr:2023.1,cat:"res",t:"FONDECYT Postdoc 3210579",d:"Think tanks y crisis políticas; 48k+ publicaciones, ETL y Power BI (2023–2024)."},
- {id:"msc",yr:2024.2,cat:"edu",t:"MSc Data Science, FCFM",d:"Tesis aprobada: grafo de 3.143 becarios ANID (defensa pendiente)."},
- {id:"idia",yr:2024.25,cat:"res",t:"Data Scientist, IDIA / IMFD",d:"Modelos predictivos, ETL multi-fuente, grafo Neo4j 3M+ relaciones. En curso."},
+ {id:"msc",yr:2024.2,cat:"edu",t:"MSc Data Science, FCFM",d:"Tesis defendida: grafo de conocimiento de 3.143 becarios ANID, con plataforma pública."},
+ {id:"idia",yr:2024.25,cat:"res",t:"Data Scientist, IDIA / IMFD",d:"Modelos predictivos, ETL multi-fuente, grafo Neo4j 3M+ relaciones (mar 2025 – sep 2026)."},
  {id:"f1124",yr:2024.7,cat:"res",t:"FONDECYT 11241304",d:"Desigualdades en academia STEM; clustering e interseccionalidad (2024–2025)."},
  {id:"coestt",yr:2024.8,cat:"res",t:"COES, Think Tanks",d:"40k+ documentos, scraping + NLP, redes de influencia (2024–2025)."},
  {id:"xiicoes",yr:2025.75,cat:"pub",t:"XII Conferencia COES",d:"Ponente: «Conocimiento experto en tiempos convulsos: think tanks durante las crisis políticas de Chile (2019–2023)». Octubre 2025."},
@@ -959,13 +1101,16 @@ const EVENTS=[
  {id:"uah",yr:2025.85,cat:"pub",t:"Presentación UAH, MiniCOES",d:"Presentación de resultados: Think Tanks Chilenos en tiempos convulsos 2019–2023. Universidad Alberto Hurtado, noviembre 2025."},
  {id:"imfd",yr:2026.05,cat:"pub",t:"VIII Workshop IMFD",d:"Participación en el VIII Workshop IMFD. Enero 2026."},
  {id:"cons",yr:2026.17,cat:"consult",t:"Consultoría IDIA, Magíster IA",d:"Evaluación cualitativa con diarización y NLP (mar–may 2026)."},
- {id:"amw",yr:2026.4,cat:"pub",t:"Paper AMW 2026",d:"«Untangling the Academic Network» enviado a AMW 2026 (CEUR-WS), con S. Ferrada Aliaga."},
+ {id:"amw",yr:2026.4,cat:"pub",t:"Paper AMW 2026, aceptado",d:"«Untangling the Academic Network» aceptado en AMW 2026 (CEUR-WS) como primer autor, con S. Ferrada Aliaga."},
+ {id:"evic",yr:2025.95,cat:"pub",t:"EVIC 2025",d:"Escuela de Verano de Inteligencia Computacional, Universidad de los Andes. Diciembre 2025."},
+ {id:"simposio",yr:2026.6,cat:"pub",t:"IV Simposio de Postgrado FCFM",d:"Ponente: «Trayectorias de becarios ANID mediante Grafos de Conocimiento y NLP». Agosto 2026."},
+ {id:"pln",yr:2026.75,cat:"teach",t:"Profesor Auxiliar, PLN",d:"Procesamiento de Lenguaje Natural, Diplomado en Ciencias de la Computación, FCFM (ago–dic 2026)."},
  {id:"lar",yr:2026.46,cat:"pub",t:"LAR Review, Reconocimiento",d:"Agradecido en Latin American Research Review (Cambridge UP)."},
  {id:"dkg",yr:2026.5,cat:"teach",t:"Grafos de Conocimiento",d:"Ayudante, Magíster en Ciencia de Datos, FCFM (marzo–julio 2026)."},
  {id:"doc_udp",yr:2026.2,cat:"teach",t:"Fundamentos de Sociología UDP",d:"Ayudante, Universidad Diego Portales (marzo–julio 2026)."},
  {id:"dir",yr:2026.62,cat:"teach",t:"Information Retrieval",d:"Ayudante, Diplomado FCFM (desde agosto 2026)."}
 ];
-const RELS=[["soc","tit"],["soc","gend"],["gend","freq"],["freq","mcoes"],["soc","mcoes"],["mcoes","ixcoes"],["mcoes","postdoc"],["doc_pl","doc_co"],["doc_co","doc_ap"],["ixcoes","postdoc"],["postdoc","xiicoes"],["postdoc","uah"],["postdoc","lar"],["msc","idia"],["msc","dkg"],["idia","cons"],["idia","amw"],["idia","imfd"],["coestt","xiicoes"],["coestt","uah"],["dkg","dir"],["soc","doc_udp"]];
+const RELS=[["soc","tit"],["soc","gend"],["gend","freq"],["freq","mcoes"],["soc","mcoes"],["mcoes","ixcoes"],["mcoes","postdoc"],["doc_pl","doc_co"],["doc_co","doc_ap"],["ixcoes","postdoc"],["postdoc","xiicoes"],["postdoc","uah"],["postdoc","lar"],["msc","idia"],["msc","dkg"],["idia","cons"],["idia","amw"],["idia","imfd"],["coestt","xiicoes"],["coestt","uah"],["dkg","dir"],["soc","doc_udp"],["msc","simposio"],["idia","evic"],["dir","pln"]];
 const W=1000,PADL=46,PADR=26;
 const x=d3.scaleLinear().domain([2014,2027]).range([PADL,W-PADR]);
 const MIN_GAP=1.1;
@@ -1043,7 +1188,9 @@ function layoutLabels(){
 layoutLabels();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layoutLabels);
 function showDetail(d){
-  document.getElementById("detail").innerHTML=
+  const det=document.getElementById("detail");
+  det.dataset.ev=d.id;
+  det.innerHTML=
    `<b>${d.t}</b><span class="when">${Math.floor(d.yr)} · ${CAT_LABEL[d.cat]}</span><p>${d.d}</p>`;
 }
 node.on("mouseover",function(ev,d){
