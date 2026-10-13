@@ -112,21 +112,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 .chapter-orn svg{display:block}
 .lead{max-width:62ch;color:var(--ink-soft);font-size:1rem;margin:1.6rem 0 2.2rem}
 .lead strong{color:var(--ink)}
+.labs-note{max-width:62ch;color:var(--ink-soft);font-size:.9rem;margin:1.4rem 0 0}
 
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}
 
 /* ── 01 origen: pin inmersivo, texto completo siempre visible ── */
-#origen .pin-space{height:175vh;position:relative}
+#origen .pin-space{height:115vh;position:relative}
 #origen .pin-stage{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;overflow:hidden}
 .origen-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:3rem;align-items:center;width:100%;max-width:1060px;margin:0 auto;padding:2rem 1.4rem}
 .origen-copy p{color:var(--ink-soft);font-size:1rem;max-width:58ch;margin-bottom:1.1rem}
-/* Biografía larga: 3 columnas dentro del marco fijo cuando cabe.
+/* Biografía en 2 columnas dentro del marco fijo cuando cabe.
    Si no cabe, JS agrega .origen-flow y la sección scrollea normalmente. */
 @media(min-width:900px){
   #origen .origen-grid{grid-template-columns:1fr;gap:1.4rem;max-width:1140px}
-  #origen .origen-copy{columns:3;column-gap:2.6rem}
+  #origen .origen-copy{columns:2;column-gap:2.6rem}
   #origen .origen-copy h2{column-span:all;margin-bottom:.9rem}
   #origen .origen-copy p{font-size:.88rem;line-height:1.5;margin:0 0 .8rem;max-width:none;
     break-inside:avoid;-webkit-column-break-inside:avoid}
@@ -366,16 +367,11 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <div class="origen-grid">
         <div class="origen-copy">
           <h2 class="chapter-word" style="margin-bottom:1.2rem">Origen</h2>
-          <p>Partí estudiando <strong>Sociología</strong> en la Universidad Andrés Bello con una pregunta simple e insidiosa: por qué la gente termina haciendo lo que hace. Salí con título y Licenciatura con Distinción, y una sospecha que nunca me abandonó: casi nada de lo social es casualidad.</p>
-          <p>La sociología de campo llegó temprano. En <strong>2018</strong>, práctica profesional en <strong>Gendarmería de Chile</strong>, en el Departamento de Clasificación y Segmentación de la Dirección Nacional: bases de datos, instrumentos y pruebas estadísticas, y trabajo de campo dentro de las cárceles Santiago 1 y CCP Puente Alto. Ver al Estado cara a cara cambia cómo uno lee las estadísticas. Ahí aprendí que un dato administrativo es, antes que nada, una decisión sobre personas.</p>
-          <p>Entre <strong>2021 y 2023</strong> trabajé en tres proyectos que me enseñaron a sostener una pregunta durante años. Grounded Theory para la desigualdad geográfica en el FONDECYT Regular 11200602. Una base de 48.000+ publicaciones sobre think tanks chilenos en el Postdoc 3210579, donde descubrí que podía automatizar lo que antes se hacía a mano. Y la Convención Constituyente con el Mini COES: entrevistas, etnografía en el Ex Congreso y redes de expertos, presentadas en el IX Congreso COES.</p>
-          <p>En paralelo llegaron mis primeras ayudantías en la Facultad de Gobierno de la Universidad de Chile: Política Latinoamericana y Comportamiento Humano en la Organización con el profesor Luis Garrido Vergara, y Análisis Empírico de Políticas Públicas con Juan Carlos Cortázar. Enseñar me obligó a ordenar lo que creía saber.</p>
-          <p>En <strong>2024</strong> llegó el salto. Entré al Magíster en Ciencia de Datos de la FCFM y, casi al mismo tiempo, a la Iniciativa de Datos e Inteligencia Artificial (<strong>IDIA</strong>), con vínculos al Instituto Milenio Fundamento de los Datos (IMFD). Pasé de analizar datos a construirlos: pipelines, grafos, modelos. La sociología me había dado las preguntas; la ingeniería me dio la infraestructura para responderlas a escala.</p>
-          <p>Mi tesis fue el proyecto que unió las dos mitades. Construí un grafo de conocimiento en Neo4j con 16 tipos de nodos y 15 tipos de relaciones —más de tres millones de aristas de coautoría— para reconstruir la trayectoria de 3.143 becarios y becarias doctorales ANID. Sobre eso corrí detección de comunidades, métricas de centralidad validadas contra modelos nulos y topic modeling con BERTopic sobre 26.071 publicaciones. La pregunta de fondo seguía siendo sociológica: si el género y la clase social de origen estructuran lo que la ciencia chilena produce. La tesis se defendió, el paper se aceptó en <strong>AMW 2026</strong> como primer autor, y la plataforma quedó pública y navegable.</p>
-          <p>Entre medio tendí el puente hacia el mundo aplicado. En mayo de 2025 fui consultor cuantitativo para Fab Consulting en la evaluación del Programa de Valorización a la Investigación de ANID, con propuesta técnica para la Subsecretaría de Ciencia, Tecnología, Conocimiento e Innovación. Y en 2026, consultoría cualitativa para el nuevo Magíster Profesional en IA de la FCFM: focus group con egresados, entrevistas a la industria y un pipeline completo de diarización, transcripción y NLP con evidencia navegable de punta a punta.</p>
-          <p>La docencia creció conmigo. En 2026 fui ayudante de Grafos de Conocimiento en el Magíster en Ciencia de Datos, de Fundamentos de la Sociología en el Bachillerato de la UDP, y de Information Retrieval en el Diplomado en Ciencias de la Computación. Desde agosto de 2026 soy <strong>Profesor Auxiliar de Procesamiento de Lenguaje Natural</strong> en ese mismo diplomado: mi primer curso a cargo. También co-guíe la memoria de título de Matías Vega, que terminó en una plataforma pública de datos sobre financiamiento de la ciencia en Chile.</p>
-          <p>Hoy cierro un ciclo y abro otro. La sociología me enseñó a preguntar; la ciencia de datos, a responder con evidencia; la docencia, a explicarlo; y la consultoría, a que sirva. Trabajo en la intersección entre grafos de conocimiento, procesamiento de lenguaje natural e ingeniería de datos, con una convicción que no ha cambiado desde 2014: casi nada de lo social es casualidad, y casi todo se puede modelar.</p>
-          <blockquote>«La sociología me dio las preguntas; los datos, la disciplina para responderlas.»</blockquote>
+          <p>Partí estudiando <strong>Sociología</strong> en la Universidad Andrés Bello con una pregunta simple: por qué la gente termina haciendo lo que hace. Salí con título y Licenciatura con Distinción, y una sospecha que nunca me abandonó: casi nada de lo social es casualidad.</p>
+          <p>En <strong>2024</strong> llegó el salto: entré al Magíster en Ciencia de Datos de la FCFM y, casi al mismo tiempo, a la Iniciativa de Datos e Inteligencia Artificial (<strong>IDIA</strong>), con vínculos al IMFD. Pasé de analizar datos a construirlos. La sociología me había dado las preguntas; la ingeniería me dio la infraestructura para responderlas a escala.</p>
+          <p>Mi tesis unió las dos mitades: un grafo de conocimiento en Neo4j para reconstruir la trayectoria de 3.143 becarios y becarias doctorales ANID, con comunidades y topic modeling sobre 26.071 publicaciones. La pregunta de fondo seguía siendo sociológica: si el género y la clase social de origen estructuran lo que la ciencia chilena produce.</p>
+          <p>Hoy cierro un ciclo y abro otro. La sociología me enseñó a preguntar; la ciencia de datos, a responder con evidencia; la docencia, a explicarlo; y la consultoría, a que sirva. Trabajo en la intersección entre grafos de conocimiento, procesamiento de lenguaje natural e ingeniería de datos.</p>
+<blockquote>«La sociología me dio las preguntas; los datos, la disciplina para responderlas.»</blockquote>
         </div>
         <div class="facts">
           <div class="fact"><b>2014–19</b><span>Sociología, UNAB, titulado con Distinción</span></div>
@@ -559,7 +555,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
           <div class="meta"><b>Cypher y GQL</b><p>Dos lenguajes, un mismo grafo: de Neo4j al estándar ISO, lado a lado.</p></div>
         </a>
     </div>
-    <p class="lead" style="margin-top:1.4rem;font-size:.9rem">Cuatro interfaces, cuatro lenguajes: OWL para razonar, SHACL para validar, SPARQL y Cypher para preguntar.</p>
+    <p class="labs-note">Cuatro interfaces, cuatro lenguajes: OWL para razonar, SHACL para validar, SPARQL y Cypher para preguntar.</p>
 
     <h3 class="group-h reveal" style="margin-top:2.6rem">Clases de ayudantía, Fundamentos de la Sociología (Bachillerato UDP)</h3>
     <p class="lead reveal" style="margin-bottom:1.4rem">Cinco clases para preparar los controles de lectura del primer semestre 2026: cada una con sus lecturas, sus autores y el repaso listo para aplicar.</p>
@@ -671,76 +667,63 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
     <div class="cursos">
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">01</span><h3>Minería de datos</h3></div>
-        <p class="curso-p">Todos los métodos clásicos del análisis de datos y sus validaciones.</p>
         <p class="curso-w">Trabajé con la Encuesta Nacional de Empleo: reducción de dimensionalidad, clustering y modelos ensamblados sobre datos reales.</p>
         <div class="tokens"><span class="tok">k-means</span><span class="tok">SVM</span><span class="tok">DBSCAN</span><span class="tok">PCA</span><span class="tok">t-SNE</span><span class="tok">UMAP</span><span class="tok">Random Forest</span><span class="tok">XGBoost</span><span class="tok">CatBoost</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">02</span><h3>Estadística</h3></div>
-        <p class="curso-p">Estadística inferencial: distribuciones normal, binomial, beta, Poisson y Dirichlet; OLS, MLE y los supuestos de OLS.</p>
         <p class="curso-w">Análisis del lobby de la Cámara de Diputados y Senadores en series de tiempo.</p>
         <div class="tokens"><span class="tok">normal</span><span class="tok">binomial</span><span class="tok">beta</span><span class="tok">Poisson</span><span class="tok">Dirichlet</span><span class="tok">OLS</span><span class="tok">MLE</span><span class="tok">supuestos OLS</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">03</span><h3>Bases de datos</h3></div>
-        <p class="curso-p">Métodos, términos y conceptos clave de las bases de datos SQL.</p>
         <div class="tokens"><span class="tok">INNER / OUTER JOIN</span><span class="tok">LEFT / RIGHT JOIN</span><span class="tok">MERGE</span><span class="tok">vistas</span><span class="tok">COUNT</span><span class="tok">nociones de memoria</span><span class="tok">construcción de queries</span><span class="tok">mejores prácticas</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">04</span><h3>Aprendizaje de máquinas</h3></div>
-        <p class="curso-p">Las matemáticas y los conceptos teóricos base de la inteligencia computacional.</p>
         <div class="tokens"><span class="tok">SGD</span><span class="tok">pseudoinversa de Moore-Penrose</span><span class="tok">álgebra lineal</span><span class="tok">Bayes</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">05</span><h3>Proyecto de ciencia de datos</h3></div>
-        <p class="curso-p">Trabajo directo con el INE y la Encuesta Nacional de Empleo.</p>
         <p class="curso-w">Construí un diagnóstico de outliers para el modelo ARIMA X13-SEATS de la tasa de desocupación.</p>
         <div class="tokens"><span class="tok">INE</span><span class="tok">ARIMA X13-SEATS</span><span class="tok">diagnóstico de outliers</span><span class="tok">series de tiempo</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">06</span><h3>Laboratorio de programación científica</h3></div>
-        <p class="curso-p">Programación y ciencia de datos con foco en calidad, rigor y fundamentos teóricos.</p>
         <p class="curso-w">Un recorrido por las mejores prácticas que uso hasta hoy: evitar el data leakage, pipelines reproducibles y monitoreo de drift.</p>
         <div class="tokens"><span class="tok">POO en Python</span><span class="tok">Plotly</span><span class="tok">pipelines scikit-learn</span><span class="tok">anti data-leakage</span><span class="tok">Prophet</span><span class="tok">XGBoost</span><span class="tok">Optuna con pruning</span><span class="tok">SHAP</span><span class="tok">Docker</span><span class="tok">Airflow (data drift)</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">07</span><h3>Análisis de datos e inferencia causal</h3></div>
-        <p class="curso-p">Las nociones más profundas de la inferencia estadística, a nivel causal.</p>
         <p class="curso-w">Interpretación de sesgo de variable omitida, sesgo de selección y variables latentes sobre casos reales.</p>
         <div class="tokens"><span class="tok">ATE</span><span class="tok">CATE</span><span class="tok">sesgo de variable omitida</span><span class="tok">sesgo de selección</span><span class="tok">variables latentes</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">08</span><h3>Taller de visualización de datos</h3></div>
-        <p class="curso-p">El uso y la relevancia del storytelling con datos, con las herramientas que uso hasta el día de hoy.</p>
         <p class="curso-w">Perfeccioné el dashboard de la Convención Constitucional que había construido como asistente de investigación.</p>
         <div class="tokens"><span class="tok">D3.js</span><span class="tok">Power BI</span><span class="tok">storytelling</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">09</span><h3>Grafos de conocimiento — La luz</h3></div>
-        <p class="curso-p">Desde la base hasta lo avanzado: ontologías, validación, embeddings y consulta de grafos.</p>
         <p class="curso-w">Transformé mi trabajo de asistente de investigación sobre clase social y género en un property graph multi-fuente. De aquí salió la tesis.</p>
         <div class="tokens"><span class="tok">RDF</span><span class="tok">RDFS</span><span class="tok">OWL</span><span class="tok">SHACL</span><span class="tok">graph embeddings</span><span class="tok">Neo4j</span><span class="tok">property graphs</span><span class="tok">centralidad</span><span class="tok">GQL</span><span class="tok">SPARQL</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">10</span><h3>Seminario de tesis</h3></div>
-        <p class="curso-p">Vínculo directo con los espacios académicos, insertado en la Iniciativa de Datos e Inteligencia Artificial.</p>
         <p class="curso-w">Construcción de la tesis junto a los profesionales del IDIA, semana a semana.</p>
         <div class="tokens"><span class="tok">IDIA</span><span class="tok">tesis</span><span class="tok">investigación aplicada</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">11</span><h3>Business analytics</h3></div>
-        <p class="curso-p">Perfeccionamiento del storytelling de datos y de Power BI.</p>
         <p class="curso-w">Construí un dashboard de más de 8 paneles sobre los becarios ANID, a partir de mi trabajo como asistente de investigación.</p>
         <div class="tokens"><span class="tok">Power BI</span><span class="tok">DAX</span><span class="tok">storytelling</span><span class="tok">dashboards</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">12</span><h3>Procesamiento del lenguaje natural — La fuerza</h3></div>
-        <p class="curso-p">Todas las nociones matemáticas detrás del lenguaje.</p>
         <div class="tokens"><span class="tok">bag of words</span><span class="tok">TF-IDF</span><span class="tok">LDA</span><span class="tok">lematización</span><span class="tok">stemming</span><span class="tok">similitud coseno</span><span class="tok">RNN</span><span class="tok">embeddings</span><span class="tok">LSTM</span><span class="tok">softmax</span><span class="tok">tokenización</span></div>
       </article>
       <article class="curso reveal">
         <div class="curso-head"><span class="curso-n">13</span><h3>Web de datos</h3></div>
-        <p class="curso-p">Profundización en Web 3: motores de Wikidata, datos federados y enlazados.</p>
         <div class="tokens"><span class="tok">Web 3</span><span class="tok">Wikidata</span><span class="tok">datos federados</span><span class="tok">datos enlazados</span><span class="tok">SPARQL</span></div>
       </article>
     </div>
@@ -773,7 +756,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       </div>
       <div class="skill-block reveal">
         <b>Harness Engineering &amp; APIs de IA</b>
-        <div class="tokens"><span class="tok">Claude Code</span><span class="tok">omp</span><span class="tok">MCP</span><span class="tok">OpenRouter</span><span class="tok">DeepSeek harness</span><span class="tok">APIs de IA</span><span class="tok">RAG</span><span class="tok">prompt engineering</span><span class="tok">LLMs locales (Ollama)</span><span class="tok">fine-tuning / LoRA</span></div>
+        <div class="tokens"><span class="tok">Claude Code</span><span class="tok">omp</span><span class="tok">MCP</span><span class="tok">OpenRouter</span><span class="tok">DeepSeek harness</span></div>
       </div>
       <div class="skill-block reveal">
         <b>Ingeniería de datos</b>
