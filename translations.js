@@ -7,7 +7,7 @@ const texts = {
   es: {
     navOrigen:"Sobre mí", navTrayectoria:"Trayectoria", navInvestigacion:"Investigación",
     navTaller:"El taller", navAulas:"Aulas", navPublicaciones:"Publicaciones",
-    navHabilidades:"Habilidades", navCv:"CV", navContacto:"Contacto",
+    navHabilidades:"Habilidades", navCv:"CV", navFormacion:"Formación", navApnea:"Apnea", navContacto:"Contacto",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"Data Scientist · Sociólogo Computacional",
     wordOrigen:"Origen", descOrigen:"De la sociología de campo a los grafos de conocimiento: la historia completa.",
@@ -19,6 +19,11 @@ const texts = {
     descHabilidades:"El stack completo: lo técnico, lo metodológico y lo sociológico, sin recortes.",
     wordPublicaciones:"Publicaciones", descPublicaciones:"Lo que quedó escrito, y lo que está en camino.",
     wordCv:"Currículum", descCv:"El registro completo, en tres idiomas.",
+    wordApnea:"Apnea", descApnea:"Fuera del trabajo, el agua: apneista certificado AIDA1.",
+    aidaMeta:"AIDA International · Symbol of Freediving",
+    aidaH3:"Apneista certificado AIDA1",
+    aidaP:"Certificado por AIDA International el 13 de mayo de 2026. Bajo el agua la regla es la misma que con los datos: medir antes de forzar.",
+    aidaLink:"Verificar certificado ↗",
     leadTrayectoria:"Cada nodo es una experiencia; cada arista, lo que una dejó en la siguiente. Hover o clic ilumina las conexiones.",
     leadInterfaces:"Como ayudante del curso construí una interfaz interactiva por laboratorio: el concepto, la sintaxis y el ejercicio en una sola página. Clic abre la interfaz completa.",
     leadFds:"Cinco clases para preparar los controles de lectura del primer semestre 2026: cada una con sus lecturas, sus autores y el repaso listo para aplicar.",
@@ -160,7 +165,7 @@ const texts = {
   en: {
     navOrigen:"About", navTrayectoria:"Trajectory", navInvestigacion:"Research",
     navTaller:"Workshop", navAulas:"Classrooms", navPublicaciones:"Publications",
-    navHabilidades:"Skills", navCv:"CV", navContacto:"Contact",
+    navHabilidades:"Skills", navCv:"CV", navFormacion:"Education", navApnea:"Freediving", navContacto:"Contact",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"Data Scientist · Computational Sociologist",
     wordOrigen:"Origin", descOrigen:"From field sociology to knowledge graphs: the whole story.",
@@ -172,6 +177,11 @@ const texts = {
     descHabilidades:"The full stack: technical, methodological and sociological, no cuts.",
     wordPublicaciones:"Publications", descPublicaciones:"What got written, and what is on its way.",
     wordCv:"CV", descCv:"The complete record, in three languages.",
+    wordApnea:"Freediving", descApnea:"Beyond work, the water: certified AIDA1 freediver.",
+    aidaMeta:"AIDA International · Symbol of Freediving",
+    aidaH3:"Certified AIDA1 freediver",
+    aidaP:"Certified by AIDA International on 13 May 2026. Underwater the rule is the same as with data: measure before you push.",
+    aidaLink:"Verify certificate ↗",
     leadTrayectoria:"Each node is an experience; each edge, what one left in the next. Hover or click lights up the connections.",
     leadInterfaces:"As the course TA I built an interactive interface for each lab: the concept, the syntax and the exercise on a single page. Click opens the full interface.",
     leadFds:"Five sessions to prepare the reading quizzes of the first semester 2026: each one with its readings, its authors and a review ready to apply.",
@@ -374,7 +384,7 @@ const texts = {
   zh: {
     navOrigen:"关于我", navTrayectoria:"经历", navInvestigacion:"研究",
     navTaller:"工作坊", navAulas:"课堂", navPublicaciones:"出版物",
-    navHabilidades:"技能", navCv:"简历", navContacto:"联系",
+    navHabilidades:"技能", navCv:"简历", navFormacion:"教育", navApnea:"自由潜水", navContacto:"联系",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"数据科学家 · 计算社会学家",
     wordOrigen:"起源", descOrigen:"从田野社会学到知识图谱：完整的故事。",
@@ -386,6 +396,11 @@ const texts = {
     descHabilidades:"完整技术栈：技术、方法论与社会学，不加删减。",
     wordPublicaciones:"出版物", descPublicaciones:"已写下的，与正在进行的。",
     wordCv:"简历", descCv:"完整记录，三种语言。",
+    wordApnea:"自由潜水", descApnea:"工作之外，是水：AIDA1 认证自由潜水员。",
+    aidaMeta:"AIDA International · 自由潜水标志",
+    aidaH3:"AIDA1 认证自由潜水员",
+    aidaP:"2026 年 5 月 13 日由 AIDA International 认证。水下的规则和面对数据一样：先测量，再推进。",
+    aidaLink:"验证证书 ↗",
     leadTrayectoria:"每个节点是一段经历；每条边，是前一个留给后一个的。悬停或点击点亮连接。",
     leadInterfaces:"作为课程助教，我为每个实验室构建了交互界面：概念、语法与练习，一页呈现。点击打开完整界面。",
     leadFds:"2026年第一学期的五次阅读测验准备课：每次都有阅读材料、作者与随时可用的复习。",
@@ -589,19 +604,33 @@ const texts = {
 
 
 /* ── Traducción del timeline (los EVENTS viven en index.html) ── */
+/* El texto en español del timeline vive solo en el array EVENTS/etiquetas de
+   index.html: el bloque 'es' no define claves evT_/evD_/cat*. Guardamos el
+   original una vez y lo restauramos cuando el idioma destino no trae la clave;
+   si no, volver a español dejaba el grafo en el idioma anterior. */
+let CAT_LABEL0 = null;
 function tradTimeline(l){
   const t = texts[l];
   if(!t || typeof EVENTS === 'undefined') return;
+  if(!CAT_LABEL0){
+    CAT_LABEL0 = Object.assign({}, CAT_LABEL);
+    EVENTS.forEach(function(e){ e.t0 = e.t; e.d0 = e.d; });
+  }
   // categorías
-  if(t.catEdu) CAT_LABEL.edu = t.catEdu;
-  if(t.catRes) CAT_LABEL.res = t.catRes;
-  if(t.catTeach) CAT_LABEL.teach = t.catTeach;
-  if(t.catConsult) CAT_LABEL.consult = t.catConsult;
-  if(t.catPub) CAT_LABEL.pub = t.catPub;
-  // títulos y descripciones
+  CAT_LABEL.edu = t.catEdu || CAT_LABEL0.edu;
+  CAT_LABEL.res = t.catRes || CAT_LABEL0.res;
+  CAT_LABEL.teach = t.catTeach || CAT_LABEL0.teach;
+  CAT_LABEL.consult = t.catConsult || CAT_LABEL0.consult;
+  CAT_LABEL.pub = t.catPub || CAT_LABEL0.pub;
+  // títulos y descripciones (siempre desde el original, nunca acumulando)
   EVENTS.forEach(function(e){
-    if(t['evT_'+e.id]) e.t = t['evT_'+e.id];
-    if(t['evD_'+e.id]) e.d = t['evD_'+e.id];
+    e.t = t['evT_'+e.id] || e.t0;
+    e.d = t['evD_'+e.id] || e.d0;
+  });
+  // leyenda: las claves existen en los 3 idiomas pero nadie las aplicaba
+  const LEG=['legendEdu','legendRes','legendTeach','legendConsult','legendPub'];
+  document.querySelectorAll('#trayectoria .legend span').forEach(function(sp,i){
+    if(t[LEG[i]] && sp.lastChild && sp.lastChild.nodeType===3) sp.lastChild.textContent=t[LEG[i]];
   });
   // re-render de etiquetas y re-layout (los anchos cambian)
   const MAX = 30;
@@ -622,8 +651,8 @@ function applyLang(l){
   const navMap={
     '#origen':t.navOrigen, '#trayectoria':t.navTrayectoria,
     '#investigacion':t.navInvestigacion, '#taller':t.navTaller,
-    '#aulas':t.navAulas, '#publicaciones':t.navPublicaciones,
-    '#habilidades':t.navHabilidades, '#cv':t.navCv, '#contacto':t.navContacto
+    '#aulas':t.navAulas, '#formacion':t.navFormacion, '#publicaciones':t.navPublicaciones,
+    '#habilidades':t.navHabilidades, '#cv':t.navCv, '#apnea':t.navApnea, '#contacto':t.navContacto
   };
   document.querySelectorAll('.nav-links a').forEach(a=>{
     const href=a.getAttribute('href');
@@ -638,6 +667,15 @@ function applyLang(l){
   if(heroH) heroH.innerHTML=t.heroTitle;
   const heroS=document.querySelector('.hero p.sub');
   if(heroS) heroS.textContent=t.heroSub;
+  // certificación AIDA1
+  const aMeta=document.querySelector('#apnea .aida-body .meta-line');
+  const aH3=document.querySelector('#apnea .aida-body h3');
+  const aP=document.querySelector('#apnea .aida-body p');
+  const aLk=document.querySelector('#apnea .aida-link');
+  if(aMeta && t.aidaMeta) aMeta.textContent=t.aidaMeta;
+  if(aH3 && t.aidaH3) aH3.textContent=t.aidaH3;
+  if(aP && t.aidaP) aP.textContent=t.aidaP;
+  if(aLk && t.aidaLink) aLk.textContent=t.aidaLink;
   // capítulos: palabra + descripción
   document.querySelectorAll('.chapter').forEach(ch=>{
     const id=ch.id;
