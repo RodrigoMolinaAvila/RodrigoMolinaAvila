@@ -10,15 +10,21 @@ const texts = {
     navHabilidades:"Habilidades", navCv:"CV", navFormacion:"Formación", navApnea:"Apnea", navContacto:"Contacto",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"Data Scientist · Sociólogo Computacional",
+    heroLead:"Convierto trayectorias, documentos y redes en grafos de conocimiento que se pueden consultar.",
+    heroStatus:"Abierto a nuevas oportunidades",
     wordOrigen:"Origen", descOrigen:"De la sociología de campo a los grafos de conocimiento: la historia completa.",
-    wordTrayectoria:"Trayectoria", descTrayectoria:"Cada nodo es una experiencia; cada arista, lo que una dejó en la siguiente. Hover o clic ilumina las conexiones.",
+    wordTrayectoria:"Trayectoria", descTrayectoria:"Cada nodo es una experiencia; cada arista, lo que una dejó en la siguiente.",
     wordInvestigacion:"Investigación", descInvestigacion:"Cuatro líneas de trabajo, un mismo método: modelar lo social para poder explicarlo.",
-    wordTaller:"El taller", descTaller:"Herramientas pequeñas nacidas de problemas reales: evaluar, automatizar, visualizar, enseñar.",
+    wordTaller:"El taller", descTaller:"Cinco herramientas que construí porque el problema estaba delante.",
     wordAulas:"Aulas", descAulas:"Enseñar lo aprendido: interfaces de laboratorio, clases de ayudantía y presentaciones de curso.",
     wordFormacion:"Formación", wordHabilidades:"Habilidades", descFormacion:"El magíster, curso por curso: qué aprendí y qué construí en cada uno.",
-    descHabilidades:"El stack completo: lo técnico, lo metodológico y lo sociológico, sin recortes.",
-    wordPublicaciones:"Publicaciones", descPublicaciones:"Lo que quedó escrito, y lo que está en camino.",
-    wordCv:"Currículum", descCv:"El registro completo, en tres idiomas.",
+    wordCertificados:"Certificados", descCertificados:"Los títulos en original: licenciatura, título profesional y magíster.",
+    certWhen0:"2018 · UNAB", certTitle0:"Licenciatura en Sociología", certNote0:"Aprobado con distinción",
+    certWhen1:"2018 · UNAB", certTitle1:"Título profesional de Sociólogo", certNote1:"Aprobado con distinción",
+    certWhen2:"2026 · U. de Chile", certTitle2:"Magíster en Ciencia de Datos", certNote2:"Distinción máxima (6,4)",
+    descHabilidades:"Lo que sé hacer, ordenado por para qué sirve.",
+    wordPublicaciones:"Publicaciones", descPublicaciones:"Un paper aceptado, una mención y una línea en curso.",
+    wordCv:"Currículum", descCv:"El mismo recorrido, en español, inglés y chino.",
     wordApnea:"Apnea", descApnea:"Fuera del trabajo, el agua: apneista certificado AIDA1.",
     aidaMeta:"AIDA International · Symbol of Freediving",
     aidaH3:"Apneista certificado AIDA1",
@@ -159,7 +165,7 @@ const texts = {
     legendEdu:"Educación", legendRes:"Investigación", legendTeach:"Docencia",
     legendConsult:"Consultoría", legendPub:"Publicación",
     footKicker:"contacto", footTitle:"Hablemos.",
-    footNote:"El grafo de fondo responde a tu cursor: es la única interacción que no pide scroll.",
+    footNote:"El grafo de fondo responde a tu cursor: es la única interacción que no pide scroll. Y hay música escondida: pulsa el botón de tema cuatro veces seguidas y después ZH.",
     detailHint:"Hover o clic en un hito."
   },
   en: {
@@ -168,15 +174,21 @@ const texts = {
     navHabilidades:"Skills", navCv:"CV", navFormacion:"Education", navApnea:"Freediving", navContacto:"Contact",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"Data Scientist · Computational Sociologist",
+    heroLead:"I turn trajectories, documents and networks into knowledge graphs you can query.",
+    heroStatus:"Open to new opportunities",
     wordOrigen:"Origin", descOrigen:"From field sociology to knowledge graphs: the whole story.",
-    wordTrayectoria:"Trajectory", descTrayectoria:"Each node is an experience; each edge, what one left in the next. Hover or click lights up the connections.",
+    wordTrayectoria:"Trajectory", descTrayectoria:"Each node is an experience; each edge, what one left in the next.",
     wordInvestigacion:"Research", descInvestigacion:"Four lines of work, one method: model the social to explain it.",
-    wordTaller:"Workshop", descTaller:"Small tools born from real problems: assess, automate, visualize, teach.",
+    wordTaller:"Workshop", descTaller:"Five tools I built because the problem was right there.",
     wordAulas:"Classrooms", descAulas:"Teaching what I learned: lab interfaces, TA sessions and course presentations.",
     wordFormacion:"Education", wordHabilidades:"Skills", descFormacion:"The master's, course by course: what I learned and what I built in each one.",
-    descHabilidades:"The full stack: technical, methodological and sociological, no cuts.",
-    wordPublicaciones:"Publications", descPublicaciones:"What got written, and what is on its way.",
-    wordCv:"CV", descCv:"The complete record, in three languages.",
+    wordCertificados:"Certificates", descCertificados:"The degrees in original: bachelor's, professional title and master's.",
+    certWhen0:"2018 · UNAB", certTitle0:"Bachelor's in Sociology", certNote0:"Passed with distinction",
+    certWhen1:"2018 · UNAB", certTitle1:"Professional title of Sociologist", certNote1:"Passed with distinction",
+    certWhen2:"2026 · U. de Chile", certTitle2:"Master's in Data Science", certNote2:"Highest distinction (6.4)",
+    descHabilidades:"What I can do, ordered by what it is for.",
+    wordPublicaciones:"Publications", descPublicaciones:"One accepted paper, one acknowledgement, one line in progress.",
+    wordCv:"CV", descCv:"The same journey, in Spanish, English and Chinese.",
     wordApnea:"Freediving", descApnea:"Beyond work, the water: certified AIDA1 freediver.",
     aidaMeta:"AIDA International · Symbol of Freediving",
     aidaH3:"Certified AIDA1 freediver",
@@ -365,8 +377,12 @@ const texts = {
     evD_evic:"Summer School on Computational Intelligence, Universidad de los Andes. December 2025.",
     evT_simposio:"IV FCFM Graduate Symposium",
     evD_simposio:"Speaker: \"Trajectories of ANID fellows through Knowledge Graphs and NLP\". August 2026.",
-    evT_pln:"Assistant Professor, NLP",
-    evD_pln:"Natural Language Processing, Diploma in Computer Science, FCFM (Aug–Dec 2026).",
+    evT_grad:"Graduated FCFM, highest distinction",
+
+    evD_grad:"Master's in Data Science, Faculty of Physical and Mathematical Sciences, Universidad de Chile. Passed with highest distinction (6.4). October 2026.",
+
+    evT_pln:"Natural Language Processing",
+    evD_pln:"Assistant Professor, Diploma in Computer Science, FCFM (Aug–Dec 2026).",
     evT_lar:"LAR Review, Acknowledgment",
     evD_lar:"Acknowledged in Latin American Research Review (Cambridge UP).",
     evT_dkg:"Knowledge Graphs",
@@ -378,7 +394,7 @@ const texts = {
     legendEdu:"Education", legendRes:"Research", legendTeach:"Teaching",
     legendConsult:"Consulting", legendPub:"Publication",
     footKicker:"contact", footTitle:"Let's talk.",
-    footNote:"The background graph responds to your cursor: the only interaction that asks no scrolling.",
+    footNote:"The background graph responds to your cursor: the only interaction that asks no scrolling. There is hidden music too: press the theme button four times in a row, then ZH.",
     detailHint:"Hover or click a milestone."
   },
   zh: {
@@ -387,15 +403,21 @@ const texts = {
     navHabilidades:"技能", navCv:"简历", navFormacion:"教育", navApnea:"自由潜水", navContacto:"联系",
     heroTitle:"Rodrigo Molina Ávila",
     heroSub:"数据科学家 · 计算社会学家",
+    heroLead:"我把轨迹、文档与网络转化为可查询的知识图谱。",
+    heroStatus:"开放新的机会",
     wordOrigen:"起源", descOrigen:"从田野社会学到知识图谱：完整的故事。",
-    wordTrayectoria:"经历", descTrayectoria:"每个节点是一段经历；每条边，是前一个留给后一个的。悬停或点击点亮连接。",
+    wordTrayectoria:"经历", descTrayectoria:"每个节点是一段经历；每条边，是前一个留给后一个的。",
     wordInvestigacion:"研究", descInvestigacion:"四条工作线，同一个方法：建模社会以解释社会。",
-    wordTaller:"工作坊", descTaller:"源于真实问题的小工具：评估、自动化、可视化、教学。",
+    wordTaller:"工作坊", descTaller:"五件工具，因为问题就在眼前而造。",
     wordAulas:"课堂", descAulas:"教授所学：实验室界面、助教课程与课程演示。",
     wordFormacion:"教育", wordHabilidades:"技能", descFormacion:"硕士课程逐门回顾：每门课学到了什么、构建了什么。",
-    descHabilidades:"完整技术栈：技术、方法论与社会学，不加删减。",
-    wordPublicaciones:"出版物", descPublicaciones:"已写下的，与正在进行的。",
-    wordCv:"简历", descCv:"完整记录，三种语言。",
+    wordCertificados:"证书", descCertificados:"学位原件：学士、专业职称与硕士。",
+    certWhen0:"2018 · UNAB", certTitle0:"社会学学士", certNote0:"以优异成绩通过",
+    certWhen1:"2018 · UNAB", certTitle1:"社会学家专业职称", certNote1:"以优异成绩通过",
+    certWhen2:"2026 · 智利大学", certTitle2:"数据科学硕士", certNote2:"最高荣誉（6.4）",
+    descHabilidades:"我会做的事，按用途排列。",
+    wordPublicaciones:"出版物", descPublicaciones:"一篇已录用论文、一次致谢、一条进行中的线。",
+    wordCv:"简历", descCv:"同一段旅程，三种语言。",
     wordApnea:"自由潜水", descApnea:"工作之外，是水：AIDA1 认证自由潜水员。",
     aidaMeta:"AIDA International · 自由潜水标志",
     aidaH3:"AIDA1 认证自由潜水员",
@@ -584,8 +606,12 @@ const texts = {
     evD_evic:"计算智能暑期学校，洛斯安第斯大学。2025年12月。",
     evT_simposio:"第四届 FCFM 研究生研讨会",
     evD_simposio:"报告人：「通过知识图谱与 NLP 分析 ANID 奖学金获得者轨迹」。2026年8月。",
-    evT_pln:"助理教授，NLP",
-    evD_pln:"自然语言处理，计算机科学文凭，FCFM（2026年8–12月）。",
+    evT_grad:"FCFM 毕业，最高荣誉",
+
+    evD_grad:"数据科学硕士，智利大学物理与数学科学学院。以最高荣誉通过（6.4）。2026年10月。",
+
+    evT_pln:"自然语言处理",
+    evD_pln:"助理教授，计算机科学文凭，FCFM（2026年8–12月）。",
     evT_lar:"LAR Review，致谢",
     evD_lar:"在 Latin American Research Review（剑桥大学出版社）中获致谢。",
     evT_dkg:"知识图谱",
@@ -597,7 +623,7 @@ const texts = {
     legendEdu:"教育", legendRes:"研究", legendTeach:"教学",
     legendConsult:"咨询", legendPub:"出版",
     footKicker:"联系", footTitle:"聊聊吧。",
-    footNote:"背景图会回应你的光标：这是唯一不需要滚动的交互。",
+    footNote:"背景图会回应你的光标：这是唯一不需要滚动的交互。还有隐藏的音乐：连续按四次主题按钮，然后按 ZH。",
     detailHint:"悬停或点击一个里程碑。"
   }
 };
@@ -637,6 +663,8 @@ function tradTimeline(l){
   d3.selectAll('#timeline text.lbl')
     .text(function(d){ return d.t.length > MAX ? d.t.slice(0, MAX-1) + '…' : d.t; });
   if(typeof layoutLabels === 'function') layoutLabels();
+  // la lista vertical (vista móvil) se reconstruye con los textos nuevos
+  if(typeof window.buildTimelineList === 'function') window.buildTimelineList();
   // detalle visible
   const det = document.getElementById('detail');
   if(det && det.dataset.ev){
@@ -667,6 +695,17 @@ function applyLang(l){
   if(heroH) heroH.innerHTML=t.heroTitle;
   const heroS=document.querySelector('.hero p.sub');
   if(heroS) heroS.textContent=t.heroSub;
+  const heroL=document.querySelector('.hero-lead');
+  if(heroL && t.heroLead) heroL.textContent=t.heroLead;
+  const heroSt=document.querySelector('.hero-status');
+  if(heroSt && t.heroStatus) heroSt.innerHTML='<span class="dot"></span>'+t.heroStatus;
+  // certificados
+  document.querySelectorAll('#certificados .cert-card').forEach(function(card,i){
+    const when=card.querySelector('.when'), b=card.querySelector('.meta b'), p=card.querySelector('.meta p');
+    if(when && t['certWhen'+i]) when.textContent=t['certWhen'+i];
+    if(b && t['certTitle'+i]) b.textContent=t['certTitle'+i];
+    if(p && t['certNote'+i]) p.textContent=t['certNote'+i];
+  });
   // certificación AIDA1
   const aMeta=document.querySelector('#apnea .aida-body .meta-line');
   const aH3=document.querySelector('#apnea .aida-body h3');
@@ -677,7 +716,8 @@ function applyLang(l){
   if(aP && t.aidaP) aP.textContent=t.aidaP;
   if(aLk && t.aidaLink) aLk.textContent=t.aidaLink;
   // capítulos: palabra + descripción
-  document.querySelectorAll('.chapter').forEach(ch=>{
+  /* #origen no lleva .chapter (usa el pin), pero su título también se traduce */
+  document.querySelectorAll('.chapter, #origen').forEach(ch=>{
     const id=ch.id;
     const wordEl=ch.querySelector('.chapter-word');
     const descEl=ch.querySelector('.chapter-desc');

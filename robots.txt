@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rodrigomolinaavila.github.io/RodrigoMolinaAvila/sitemap.xml
