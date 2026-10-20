@@ -100,7 +100,7 @@
   --measure:62ch;
 }
 [data-theme="dark"]{
-  --canvas:#12110F; --surface:#1B1A17; --ink:#EAE7DF; --ink-soft:#A39E92;
+  --canvas:#12110F; --surface:#1B1A17; --bg2:#171614; --ink:#EAE7DF; --ink-soft:#A39E92;
   --accent:#8FB3F5; --accent-ink:#0D0D12;
   --border:#2C2B26;
   --edu:#6FC0E8; --res:#8FB3F5; --teach:#7BCBA0; --consult:#DCAE62; --pub:#DE8FB4;
@@ -146,8 +146,9 @@ p{text-wrap:pretty}
 
 /* ── fondo vivo: canvas de partículas (movimiento firma) ── */
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity .6s var(--ease)}
+#bg canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 /* en secciones de lectura el grafo se atenúa para no competir con el texto */
-body.reading #bg{opacity:.42}
+body.reading #bg{opacity:.68}
 /* grano: profundidad herramienta 5 */
 .grain{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E")}
 .content{position:relative;z-index:1}
@@ -155,7 +156,14 @@ body.reading #bg{opacity:.42}
 .skip-link:focus{left:0}
 
 /* ── nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb,var(--canvas) 84%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:color-mix(in srgb,var(--canvas) 62%,transparent);
+  backdrop-filter:blur(14px) saturate(1.15);-webkit-backdrop-filter:blur(14px) saturate(1.15);
+  border-bottom:1px solid color-mix(in srgb,var(--border) 55%,transparent);
+  transition:background .3s var(--ease),border-color .3s var(--ease)}
+/* en la portada el nav se disuelve sobre el efecto */
+body.hero-view nav{background:color-mix(in srgb,var(--canvas) 34%,transparent);
+  border-bottom-color:transparent}
 .nav-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.4rem}
 .brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
 .brand span{color:inherit}
@@ -168,6 +176,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 .theme-btn:active{transform:scale(.97)}
 .menu-btn{display:none;background:none;border:1px solid var(--border);border-radius:8px;color:var(--ink);font-size:1.1rem;line-height:1;width:34px;height:34px;cursor:pointer}
 @media(max-width:760px){
+  /* backdrop-filter sobre el canvas WebGL deja un artefacto de composición
+     en móvil (una caja blanca fuera del nav). Se sustituye por fondo sólido. */
+  nav{backdrop-filter:none;-webkit-backdrop-filter:none;
+      background:color-mix(in srgb,var(--canvas) 92%,transparent)}
+  body.hero-view nav{background:color-mix(in srgb,var(--canvas) 78%,transparent)}
   .menu-btn{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:.9rem;background:var(--bg2,var(--surface));border-bottom:1px solid var(--border);padding:1rem 1.4rem}
   .nav-links.open{display:flex}
@@ -185,8 +198,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 .socials .chip .ic{fill:var(--accent)}
 
 /* ── hero: máximo cuatro elementos de texto, dos líneas, CTA visible ── */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 1.4rem 4rem;position:relative}
-.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;max-width:20ch}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 1.4rem 4rem;position:relative;overflow:hidden}
+/* portada: GradientASCII (React Bits) portado a WebGL2 vanilla */
+#ascii{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+  /* dos máscaras intersectadas: la radial abre el centro y el degradado
+     inferior garantiza que el borde de abajo llegue a transparente, sin corte */
+  mask-image:radial-gradient(ellipse 88% 74% at 50% 46%,#000 38%,transparent 88%),
+             linear-gradient(to bottom,#000 0%,#000 62%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 88% 74% at 50% 46%,#000 38%,transparent 88%),
+             linear-gradient(to bottom,#000 0%,#000 62%,transparent 100%);
+  mask-composite:intersect;
+  -webkit-mask-composite:source-in}
+#ascii canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.hero > *:not(#ascii){position:relative;z-index:1}
+/* en la portada el grafo de partículas cede el protagonismo */
+body.hero-view #bg{opacity:.14}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:700;letter-spacing:-.02em;
+  /* line-height holgado + padding: el background-clip:text recorta al box del
+     elemento, así que el descendente de la "g" necesita espacio dentro de él */
+  line-height:1.22;padding-bottom:.12em;max-width:20ch}
+/* ShinyText (React Bits) portado: gradiente recortado al texto */
+.shiny-text{position:relative;display:inline-block;background-repeat:no-repeat;background-size:100% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.shiny-text__glow{position:absolute;inset:0;background-repeat:no-repeat;background-size:100% 100%;
+  -webkit-background-clip:text;background-clip:text;filter:blur(.14em);pointer-events:none;user-select:none}
+/* chips de redes */
+.chips--social{margin-top:1.6rem}
+.chip--social{padding:.42rem .9rem;font-size:.78rem}
+.chip--social .ic{width:14px;height:14px}
 .hero h1 em{font-style:italic;color:var(--accent)}
 .hero p.sub{max-width:46ch;margin:1.4rem auto 0;color:var(--ink-soft);font-size:1rem}
 .hero-lead{max-width:52ch;margin:1.1rem auto 0;color:var(--ink);font-size:clamp(1rem,1.6vw,1.18rem);line-height:1.5;text-wrap:balance}
@@ -368,6 +407,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:color-mix(in srgb
 /* ── 05 aulas ── */
 .group-h{font-size:1.05rem;font-weight:700;margin:2.4rem 0 .5rem}
 .skills-full{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem 2rem;align-items:start}
+/* ── LogoLoop (React Bits) portado ── */
+.logoloop{--logoloop-gap:46px;--logoloop-logoHeight:34px;position:relative;overflow:hidden;
+  padding:1.1rem 0;margin:0 0 1.6rem;-webkit-tap-highlight-color:transparent}
+.logoloop[data-draggable]{cursor:grab;touch-action:pan-y pinch-zoom}
+.logoloop[data-dragging],.logoloop[data-dragging] *{cursor:grabbing}
+.logoloop__track{position:relative;z-index:0;display:flex;width:max-content;will-change:transform;
+  user-select:none;-webkit-user-select:none}
+.logoloop__list{display:flex;align-items:center;margin:0;padding:0;list-style:none}
+.logoloop__item{position:relative;flex:0 0 auto;margin-right:var(--logoloop-gap);
+  font-size:var(--logoloop-logoHeight);line-height:1}
+.logoloop__content{display:inline-flex;align-items:center;border-radius:6px;color:inherit;
+  text-decoration:none;transition:opacity .35s ease,filter .35s ease,color .35s ease}
+.logoloop__content:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.logoloop__node{display:inline-flex;align-items:center}
+.logoloop__item img{display:block;width:auto;height:var(--logoloop-logoHeight);object-fit:contain;
+  -webkit-user-drag:none;pointer-events:none;
+  filter:grayscale(1) opacity(.78);transition:filter .3s ease,transform .3s cubic-bezier(.4,0,.2,1)}
+.logoloop__item:hover img,.logoloop__item:focus-within img{filter:grayscale(0) opacity(1);transform:scale(1.18)}
+.logoloop__tip{position:absolute;top:100%;left:50%;margin-top:calc(var(--logoloop-logoHeight)*.22);
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.04em;white-space:nowrap;
+  color:var(--ink-soft);opacity:0;translate:-50% 4px;pointer-events:none;
+  transition:opacity .25s ease,translate .25s ease}
+.logoloop__item:hover .logoloop__tip,.logoloop__item:focus-within .logoloop__tip{opacity:.85;translate:-50% 0}
+@media(prefers-reduced-motion:reduce){
+  .logoloop__item img,.logoloop__tip{transition:none}
+}
 /* certificados */
 .certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:1.4rem}
 .cert-card{background:var(--surface);border:1px solid var(--border);border-top-color:var(--edge);border-radius:12px;overflow:hidden;
@@ -511,7 +576,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 <body>
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
-<canvas id="bg" aria-hidden="true"></canvas>
+<div id="bg" aria-hidden="true"></div>
 
 <div class="player" id="player" hidden aria-label="Reproductor">
   <audio id="track" src="assets/pantano.mp3" preload="metadata"></audio>
@@ -529,13 +594,13 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   <a href="#origen" data-ch="origen"><span>Origen</span><i></i></a>
   <a href="#trayectoria" data-ch="trayectoria"><span>Trayectoria</span><i></i></a>
   <a href="#investigacion" data-ch="investigacion"><span>Investigación</span><i></i></a>
-  <a href="#taller" data-ch="taller"><span>El taller</span><i></i></a>
   <a href="#aulas" data-ch="aulas"><span>Aulas</span><i></i></a>
   <a href="#formacion" data-ch="formacion"><span>Formación</span><i></i></a>
   <a href="#certificados" data-ch="certificados"><span>Certificados</span><i></i></a>
   <a href="#publicaciones" data-ch="publicaciones"><span>Publicaciones</span><i></i></a>
   <a href="#habilidades" data-ch="habilidades"><span>Habilidades</span><i></i></a>
   <a href="#cv" data-ch="cv"><span>CV</span><i></i></a>
+  <a href="#taller" data-ch="taller"><span>El taller</span><i></i></a>
   <a href="#apnea" data-ch="apnea"><span>Apnea</span><i></i></a>
   <a href="#contacto" data-ch="contacto"><span>Contacto</span><i></i></a>
 </div>
@@ -545,8 +610,8 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   <div class="nav-right">
     <div class="nav-links" id="navLinks">
       <a href="#origen">Sobre mí</a><a href="#trayectoria">Trayectoria</a>
-      <a href="#investigacion">Investigación</a><a href="#taller">El taller</a><a href="#formacion">Formación</a>
-      <a href="#publicaciones">Publicaciones</a><a href="#habilidades">Habilidades</a><a href="#cv">CV</a><a href="#contacto">Contacto</a>
+      <a href="#investigacion">Investigación</a><a href="#formacion">Formación</a>
+      <a href="#publicaciones">Publicaciones</a><a href="#habilidades">Habilidades</a><a href="#cv">CV</a><a href="#taller">El taller</a><a href="#contacto">Contacto</a>
     </div>
     <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema" title="Claro / oscuro">◐</button>
     <div style="display:flex;gap:.25rem;font-size:.78rem">
@@ -562,15 +627,22 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 <main id="main">
 
 <header class="hero" id="top">
+  <div id="ascii" aria-hidden="true"></div>
   <h1>Rodrigo Molina Ávila</h1>
   <p class="sub">Data Scientist · Sociólogo Computacional</p>
-  <p class="hero-lead">Convierto trayectorias, documentos y redes en grafos de conocimiento que se pueden consultar.</p>
-  <p class="hero-status"><span class="dot"></span>Abierto a nuevas oportunidades</p>
   <div class="chips">
-    <a class="chip" href="https://interrogandolaacademia.cl/" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z"/></svg>interrogandolaacademia.cl</a>
     <a class="chip" href="https://idia.uchile.cl/quienes-somos/rodrigo-molina/" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 .01 20A10 10 0 0 0 12 2zm6.93 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.7 15.7 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>Perfil IDIA ↗</a>
     <a class="chip" href="https://orcid.org/0009-0006-0648-0799" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 .01 20A10 10 0 0 0 12 2zM8.5 7.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM7.5 10.5h2V17h-2v-6.5zm4 0h3.2c1.6 0 2.8 1.2 2.8 3.2S15.3 17 13.7 17h-3.2v-6.5zm1.4 1.4v3.7h1.6c1 0 1.7-.7 1.7-1.8 0-1.2-.7-1.9-1.7-1.9h-1.6z"/></svg>ORCID</a>
     <a class="chip" href="https://github.com/RodrigoMolinaAvila" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a>
+  </div>
+  <div class="chips chips--social">
+    <a class="chip chip--social" href="https://www.linkedin.com/in/rodmolinaavila/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="ic" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.4 8.65 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.3-2-3.3-2 0-2.3 1.57-2.3 3.2V21H9z"/></svg>LinkedIn</a>
+    <a class="chip chip--social" href="https://www.facebook.com/holaholaolahola" target="_blank" rel="noopener" aria-label="Facebook"><svg class="ic" viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.29-.04-1.27-.12-2.41-.12-2.39 0-4.03 1.46-4.03 4.14V9.9H7.5V13h2.76v8z"/></svg>Facebook</a>
+    <a class="chip chip--social" href="https://x.com/RodrigoMolinaAv" target="_blank" rel="noopener" aria-label="X"><svg class="ic" viewBox="0 0 24 24"><path d="M17.53 3h3.02l-6.6 7.54L21.75 21h-6.06l-4.75-6.2L5.5 21H2.47l7.06-8.07L2.25 3h6.21l4.29 5.67zm-1.06 16.2h1.67L7.6 4.7H5.8z"/></svg>X</a>
+    <a class="chip chip--social" href="https://www.instagram.com/rodrigomolina.avila/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.8 3.8 0 0 1-1.38-.9 3.8 3.8 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.5.01-4.74.07-.9.04-1.38.19-1.7.32-.43.16-.73.36-1.05.68-.32.32-.52.62-.68 1.05-.13.32-.28.8-.32 1.7C3.45 8.5 3.44 8.86 3.44 12s.01 3.5.07 4.74c.04.9.19 1.38.32 1.7.16.43.36.73.68 1.05.32.32.62.52 1.05.68.32.13.8.28 1.7.32 1.24.06 1.6.07 4.74.07s3.5-.01 4.74-.07c.9-.04 1.38-.19 1.7-.32.43-.16.73-.36 1.05-.68.32-.32.52-.62.68-1.05.13-.32.28-.8.32-1.7.06-1.24.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.04-.9-.19-1.38-.32-1.7a2.8 2.8 0 0 0-.68-1.05 2.8 2.8 0 0 0-1.05-.68c-.32-.13-.8-.28-1.7-.32C15.5 4.01 15.14 4 12 4zm0 3.06a4.94 4.94 0 1 1 0 9.88 4.94 4.94 0 0 1 0-9.88zm0 1.8a3.14 3.14 0 1 0 0 6.28 3.14 3.14 0 0 0 0-6.28zm6.3-2.1a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>Instagram</a>
+    <a class="chip chip--social" href="https://www.twitch.tv/dodrigooo" target="_blank" rel="noopener" aria-label="Twitch"><svg class="ic" viewBox="0 0 24 24"><path d="M4.3 3 3 6.4v13.2h4.2V22h2.4l2.4-2.4h3.6L21 15.2V3zm15 11.4-3 3h-4.8L9.1 19.8v-2.4H5.4V4.8h13.9zM16.2 7.2h1.8v5.4h-1.8zm-4.8 0h1.8v5.4h-1.8z"/></svg>Twitch</a>
+    <a class="chip chip--social" href="https://steamcommunity.com/profiles/76561198047113330" target="_blank" rel="noopener" aria-label="Steam"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-9.96 9.1l5.35 2.21a2.83 2.83 0 0 1 1.6-.49h.15l2.38-3.45v-.05a3.78 3.78 0 1 1 3.78 3.78h-.09l-3.4 2.43v.12a2.84 2.84 0 0 1-5.64.5L2.6 14.6A10 10 0 1 0 12 2zm-4.4 15.2-1.23-.51a2.13 2.13 0 0 0 3.9-.79 2.13 2.13 0 0 0-2.87-2.06l1.27.53a1.57 1.57 0 1 1-1.22 2.89zm9.42-6.12a2.52 2.52 0 1 1 0-5.04 2.52 2.52 0 0 1 0 5.04zm0-.63a1.89 1.89 0 1 0 0-3.78 1.89 1.89 0 0 0 0 3.78z"/></svg>Steam</a>
+    <a class="chip chip--social" href="mailto:rodmolina.avila@gmail.com" aria-label="Correo"><svg class="ic" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Correo</a>
   </div>
 </header>
 
@@ -586,7 +658,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
           <p>Hoy cierro un ciclo y abro otro. La sociología me enseñó a preguntar; la ciencia de datos, a responder con evidencia; la docencia, a explicarlo; y la consultoría, a que sirva. Trabajo en la intersección entre grafos de conocimiento, procesamiento de lenguaje natural e ingeniería de datos.</p>
         </div>
         <figure class="origen-photo">
-          <img src="assets/retrato.webp" alt="Rodrigo Molina Ávila" loading="lazy" width="900" height="1200">
+          <img src="assets/retrato.webp?v=4c9992a0" alt="Rodrigo Molina Ávila" loading="lazy" width="900" height="1200">
         </figure>
         <div class="facts">
           <div class="fact"><b>2014–19</b><span>Sociología, UNAB, titulado con Distinción</span></div>
@@ -681,49 +753,6 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
   </div>
 </section>
 
-<section id="taller" class="chapter">
-  <div class="chapter-inner">
-    <div class="chapter-head reveal">
-      <h2 class="chapter-word">El taller</h2>
-      <span class="chapter-desc">Cinco herramientas que construí porque el problema estaba delante.</span>
-      <span class="chapter-orn" data-orn="tree"></span>
-    </div>
-    <div class="tools">
-      <a class="tool reveal" href="https://rodrigomolinaavila.github.io/udp-controlgenerator/" target="_blank" rel="noopener">
-        <div><span class="tag">App · Educación</span>
-        <h3>UDP Control Generator</h3>
-        <p>Genera controles de lectura para Fundamentos de la Sociología: preguntas, orden aleatorio y salida lista para aplicar.</p></div>
-        <div class="tool-shot"><img src="assets/site-controlgenerator.webp" alt="UDP Control Generator" loading="lazy"></div>
-      </a>
-      <a class="tool reveal" href="assets/machinefinal.html" target="_blank" rel="noopener">
-        <div><span class="tag">Guía · Data Science</span>
-        <h3>Prediction Guide</h3>
-        <p>Una guía de data science escrita para un amigo: qué significa aprender de datos, el pipeline como secuencia sagrada y el salto de correlación a causalidad.</p></div>
-        <div class="tool-shot"><img src="assets/site-prediction.webp" alt="Prediction Guide" loading="lazy"></div>
-      </a>
-      <a class="tool reveal" href="https://github.com/RodrigoMolinaAvila/tntsports-jugadorexperto" target="_blank" rel="noopener">
-        <div><span class="tag">Script · Automatización</span>
-        <h3>tntsports-jugadorexperto</h3>
-        <p>Voto automático para el «jugador experto» de TNT Sports.</p>
-        <span class="retired">jubilado con honores: ahora piden login por voto</span></div>
-        <div class="tool-shot"><img src="assets/site-tntsports.webp" alt="tntsports-jugadorexperto en GitHub" loading="lazy"></div>
-      </a>
-      <a class="tool reveal" href="https://rodrigomolinaavila.github.io/mapviz/" target="_blank" rel="noopener">
-        <div><span class="tag">Viz · El origen</span>
-        <h3>MapViz</h3>
-        <p>Mi primera creación en HTML: población indígena y afrodescendiente de Latinoamérica, país por país.</p></div>
-        <div class="tool-shot"><img src="assets/site-mapviz.webp" alt="MapViz" loading="lazy"></div>
-      </a>
-      <a class="tool reveal" href="assets/panorama-palta.html" target="_blank" rel="noopener">
-        <div><span class="tag">Viz · Mercado</span>
-        <h3>Panorama Competitivo · Palta Chilena</h3>
-        <p>Un deck autocontenido de 25 láminas sobre el mercado de la palta: scraping de ODEPA y Paltas de Chile, mapas interactivos en D3.js y análisis competitivo de exportadores.</p></div>
-        <div class="tool-shot"><img src="assets/site-panorama-palta.webp" alt="Panorama Competitivo · Palta Chilena" loading="lazy"></div>
-      </a>
-    </div>
-  </div>
-</section>
-
 <section id="aulas" class="chapter">
   <div class="chapter-inner">
     <div class="chapter-head reveal">
@@ -732,26 +761,25 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <span class="chapter-orn" data-orn="bipartite"></span>
     </div>
 
-
     <h3 class="roles-h reveal">Docencia</h3>
     <div class="roles reveal">
-      <div class="role"><b>2026</b><div><span>Profesor Auxiliar — Procesamiento de Lenguaje Natural</span><i>Diplomado en Ciencias de la Computación, FCFM</i></div></div>
-      <div class="role"><b>2026</b><div><span>Ayudante — Information Retrieval</span><i>Diplomado en Ciencias de la Computación, FCFM</i></div></div>
-      <div class="role"><b>2026</b><div><span>Ayudante — Grafos de Conocimiento</span><i>Magíster en Ciencia de Datos, FCFM</i></div></div>
-      <div class="role"><b>2026</b><div><span>Ayudante — Fundamentos de la Sociología</span><i>Bachillerato, Universidad Diego Portales</i></div></div>
-      <div class="role"><b>2025–26</b><div><span>Co-guía de memoria de título</span><i>DCC, FCFM, Universidad de Chile</i></div></div>
-      <div class="role"><b>2022</b><div><span>Ayudante — Política Latinoamericana</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
-      <div class="role"><b>2022</b><div><span>Ayudante — Comportamiento Humano en la Organización</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
-      <div class="role"><b>2022</b><div><span>Ayudante — Análisis Empírico de Políticas Públicas</span><i>Facultad de Gobierno, U. de Chile</i></div></div>
+      <div class="role"><b>2026</b><div><span>Profesor Auxiliar — Procesamiento de Lenguaje Natural</span><i>Diplomado en Ciencias de la Computación - Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Information Retrieval</span><i>Diplomado en Ciencias de la Computación - Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Grafos de Conocimiento</span><i>Magíster en Ciencia de Datos - Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile</i></div></div>
+      <div class="role"><b>2026</b><div><span>Ayudante — Fundamentos de la Sociología</span><i>Bachillerato - Facultad de Ciencias Sociales y Humanidades - Universidad Diego Portales</i></div></div>
+      <div class="role"><b>2025–26</b><div><span>Co-guía de memoria de título</span><i>Departamento de Ciencias de la Computación - Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Política Latinoamericana</span><i>Ciencia Política - Facultad de Gobierno - Universidad de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Comportamiento Humano en la Organización</span><i>Ciencia Política - Facultad de Gobierno - Universidad de Chile</i></div></div>
+      <div class="role"><b>2022</b><div><span>Ayudante — Análisis Empírico de Políticas Públicas</span><i>Administración Pública - Facultad de Gobierno - Universidad de Chile</i></div></div>
     </div>
 
     <div class="reveal" style="background:var(--surface);border:1px solid var(--border);border-top-color:var(--edge);border-radius:14px;padding:1.5rem 1.6rem;box-shadow:var(--shadow);margin-bottom:2.2rem">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)">Co-guía de memoria de título · DCC, FCFM U. de Chile</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)">Co-guía de memoria de título · Departamento de Ciencias de la Computación - Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile</span>
       <h3 style="font-size:1.12rem;font-weight:700;margin:.4rem 0 .5rem">Plataforma web para acceso a datos sobre financiamiento de la ciencia en Chile</h3>
       <p style="color:var(--ink-soft);font-size:.92rem;max-width:62ch">Profesor co-guía de la memoria de título de Matías Vega (agosto 2025 a junio 2026). El resultado es la plataforma pública con los datos del grafo de becarios ANID, abiertos y consultables.</p>
       <a href="https://interrogandolaacademia.cl/" target="_blank" rel="noopener" style="font-size:.84rem;font-weight:600">Ver plataforma ↗</a>
     </div>
-    <h3 class="group-h reveal">Interfaces de laboratorio, MDS7205 Grafos de Conocimiento (U. de Chile)</h3>
+    <h3 class="group-h reveal">Interfaces de laboratorio, MDS7205 Grafos de Conocimiento (Universidad de Chile)</h3>
     <p class="lead reveal" style="margin-bottom:1.4rem">Como ayudante del curso construí una interfaz interactiva por laboratorio: el concepto, la sintaxis y el ejercicio en una sola página. Clic abre la interfaz completa.</p>
     <div class="labs">
         <a class="aula reveal d0" href="assets/labs/lab2/index.html" target="_blank" rel="noopener">
@@ -777,7 +805,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
     </div>
     <p class="labs-note">Cuatro interfaces, cuatro lenguajes: OWL para razonar, SHACL para validar, SPARQL y Cypher para preguntar.</p>
 
-    <h3 class="group-h reveal" style="margin-top:2.6rem">Clases de ayudantía, Fundamentos de la Sociología (Bachillerato UDP)</h3>
+    <h3 class="group-h reveal" style="margin-top:2.6rem">Clases de ayudantía, Fundamentos de la Sociología (Bachillerato - Facultad de Ciencias Sociales y Humanidades - Universidad Diego Portales)</h3>
     <p class="lead reveal" style="margin-bottom:1.4rem">Cinco clases para preparar los controles de lectura del primer semestre 2026: cada una con sus lecturas, sus autores y el repaso listo para aplicar.</p>
     <div class="fds">
       <a class="fds-card reveal" href="assets/clases/fds-1.pdf" target="_blank" rel="noopener">
@@ -871,7 +899,6 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
     </div>
   </div>
 </section>
-
 
 <section id="formacion" class="chapter">
   <div class="chapter-inner">
@@ -994,6 +1021,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
       <span class="chapter-desc">Lo que sé hacer, ordenado por para qué sirve.</span>
       <span class="chapter-orn" data-orn="complete"></span>
     </div>
+    <div class="logoloop" id="skill-loop" role="region" aria-label="Herramientas y tecnologías" data-draggable></div>
     <div class="skills-full">
       <div class="skill-block reveal">
         <b>Lenguajes</b>
@@ -1089,6 +1117,49 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 </div>
 </section>
 
+<section id="taller" class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-head reveal">
+      <h2 class="chapter-word">El taller</h2>
+      <span class="chapter-desc">Cinco herramientas que construí porque el problema estaba delante.</span>
+      <span class="chapter-orn" data-orn="tree"></span>
+    </div>
+    <div class="tools">
+      <a class="tool reveal" href="https://rodrigomolinaavila.github.io/udp-controlgenerator/" target="_blank" rel="noopener">
+        <div><span class="tag">App · Educación</span>
+        <h3>UDP Control Generator</h3>
+        <p>Genera controles de lectura para Fundamentos de la Sociología: preguntas, orden aleatorio y salida lista para aplicar.</p></div>
+        <div class="tool-shot"><img src="assets/site-controlgenerator.webp" alt="UDP Control Generator" loading="lazy"></div>
+      </a>
+      <a class="tool reveal" href="assets/machinefinal.html" target="_blank" rel="noopener">
+        <div><span class="tag">Guía · Data Science</span>
+        <h3>Prediction Guide</h3>
+        <p>Una guía de data science escrita para un amigo: qué significa aprender de datos, el pipeline como secuencia sagrada y el salto de correlación a causalidad.</p></div>
+        <div class="tool-shot"><img src="assets/site-prediction.webp" alt="Prediction Guide" loading="lazy"></div>
+      </a>
+      <a class="tool reveal" href="https://github.com/RodrigoMolinaAvila/tntsports-jugadorexperto" target="_blank" rel="noopener">
+        <div><span class="tag">Script · Automatización</span>
+        <h3>tntsports-jugadorexperto</h3>
+        <p>Voto automático para el «jugador experto» de TNT Sports.</p>
+        <span class="retired">jubilado con honores: ahora piden login por voto</span></div>
+        <div class="tool-shot"><img src="assets/site-tntsports.webp" alt="tntsports-jugadorexperto en GitHub" loading="lazy"></div>
+      </a>
+      <a class="tool reveal" href="https://rodrigomolinaavila.github.io/mapviz/" target="_blank" rel="noopener">
+        <div><span class="tag">Viz · El origen</span>
+        <h3>MapViz</h3>
+        <p>Mi primera creación en HTML: población indígena y afrodescendiente de Latinoamérica, país por país.</p></div>
+        <div class="tool-shot"><img src="assets/site-mapviz.webp" alt="MapViz" loading="lazy"></div>
+      </a>
+      <a class="tool reveal" href="assets/panorama-palta.html" target="_blank" rel="noopener">
+        <div><span class="tag">Viz · Mercado</span>
+        <h3>Panorama Competitivo · Palta Chilena</h3>
+        <p>Un deck autocontenido de 25 láminas sobre el mercado de la palta: scraping de ODEPA y Paltas de Chile, mapas interactivos en D3.js y análisis competitivo de exportadores.</p></div>
+        <div class="tool-shot"><img src="assets/site-panorama-palta.webp" alt="Panorama Competitivo · Palta Chilena" loading="lazy"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="apnea" class="chapter">
   <div class="chapter-inner">
     <div class="chapter-head reveal">
@@ -1144,46 +1215,8 @@ const navLinks=document.getElementById("navLinks"),menuBtn=document.getElementBy
 menuBtn.addEventListener("click",()=>{const o=navLinks.classList.toggle("open");menuBtn.setAttribute("aria-expanded",o)});
 navLinks.addEventListener("click",e=>{if(e.target.tagName==="A"){navLinks.classList.remove("open");menuBtn.setAttribute("aria-expanded","false")}});
 
-// ══════════════════════════════════════════════════════════
-// MOVIMIENTO FIRMA: la red de partículas responde al cursor.
-// Las partículas cercanas al puntero se conectan a él y lo siguen.
-// ══════════════════════════════════════════════════════════
-const bgCanvas=document.getElementById("bg"),bgCtx=bgCanvas.getContext("2d");
-let BW=0,BH=0;
-function bgResize(){
-  const dpr=Math.min(window.devicePixelRatio||1,1.5);
-  BW=bgCanvas.width=window.innerWidth*dpr;
-  BH=bgCanvas.height=window.innerHeight*dpr;
-  bgCanvas.style.width=window.innerWidth+"px";bgCanvas.style.height=window.innerHeight+"px";
-}
-bgResize();window.addEventListener("resize",bgResize);
-
-const FORMATIONS={
-  top:{hue:222,fn:(i,n,w,h)=>({x:Math.random()*w,y:Math.random()*h})},
-  origen:{hue:210,fn:(i,n,w,h)=>{const k=i%6;return{x:w*(.12+.15*k)+((i*97)%40-20),y:h*(.2+.13*Math.floor(i/6))+((i*53)%40-20)}}},
-  trayectoria:{hue:214,fn:(i,n,w,h)=>{const t=i/n;return{x:w*(.06+.88*t),y:h*.5+Math.sin(t*Math.PI*3)*h*.16}}},
-  investigacion:{hue:238,fn:(i,n,w,h)=>{const c=[[.25,.3],[.7,.28],[.3,.72],[.75,.7]][i%4];return{x:w*c[0]+((i*131)%90-45),y:h*c[1]+((i*77)%90-45)}}},
-  taller:{hue:262,fn:(i,n,w,h)=>{const cols=7,r=Math.floor(i/cols),c=i%cols;return{x:w*(.14+.72*c/(cols-1))+((i*61)%30-15),y:h*(.22+.56*(r/3))+((i*47)%26-13)}}},
-  aulas:{hue:297,fn:(i,n,w,h)=>{const a=(i/n)*Math.PI*2,r=(i%2?h*.3:h*.17);return{x:w*.5+Math.cos(a)*w*.36,y:h*.5+Math.sin(a)*r}}},
-  publicaciones:{hue:315,fn:(i,n,w,h)=>{const spoke=i%5,a=(spoke/5)*Math.PI*2,r=h*(.12+.3*((i/5)%4)/3);return{x:w*.5+Math.cos(a)*r*1.6,y:h*.5+Math.sin(a)*r}}},
-  cv:{hue:200,fn:(i,n,w,h)=>{const col=i%3;return{x:w*(.28+.22*col)+((i*89)%36-18),y:h*(.18+.64*Math.floor(i/3)/Math.ceil(n/3))+((i*41)%30-15)}}},
-  contacto:{hue:222,fn:(i,n,w,h)=>{const a=(i/n)*Math.PI*2,r=h*.1*((i*7)%5)/4;return{x:w*.5+Math.cos(a)*r*1.4,y:h*.5+Math.sin(a)*r}}},
-  apnea:{hue:196,fn:(i,n,w,h)=>{const t=i/n;return{x:w*(.08+.84*t),y:h*.62-Math.sin(t*Math.PI*2)*h*.28+((i*67)%36-18)}}}
-};
-const NP=Math.min(120,Math.max(55,Math.round(window.innerWidth/13)));
-const parts=[];
-for(let i=0;i<NP;i++)parts.push({x:Math.random()*BW,y:Math.random()*BH,tx:0,ty:0,sz:.8+Math.pow(Math.random(),2)*3.4,ph:Math.random()*Math.PI*2,sp:.4+Math.random()*.5,mode:i%4===0?"free":"form",hueJ:(Math.random()-.5)*46,free:{vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3}});
-let curHue=222;
-function setFormation(name){
-  const f=FORMATIONS[name]||FORMATIONS.top;
-  if(f.hue!==undefined)curHue=f.hue;
-  parts.forEach((p,i)=>{const t=f.fn(i,parts.length,BW,BH);p.tx=t.x;p.ty=t.y;});
-}
-setFormation("top");
-
-const mouse={x:-9999,y:-9999,active:false};
-window.addEventListener("pointermove",e=>{mouse.x=e.clientX*(BW/window.innerWidth);mouse.y=e.clientY*(BH/window.innerHeight);mouse.active=true;},{passive:true});
-window.addEventListener("pointerleave",()=>{mouse.active=false;});
+/* El fondo ahora es WebGL2 (bg-particles.js): nube 3D con
+   profundidad de campo, glow, twinkle y constelaciones. */
 
 const railLinks=[...document.querySelectorAll(".rail a")];
 function currentChapter(){
@@ -1198,12 +1231,15 @@ let lastCh="";
 function updateRail(){
   const cur=currentChapter();
   railLinks.forEach(a=>{const on=a.dataset.ch===cur;a.classList.toggle("on",on);if(on)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current");});
-  if(cur!==lastCh){lastCh=cur;setFormation(cur);}
+  lastCh=cur;
 }
 
 /* ══ Reproductor oculto + fondo reactivo al sonido ══
    Secuencia: botón de tema 4 veces seguidas, después el botón ZH. */
 const audioState={level:0,bass:0,mid:0,treble:0,punch:0,flux:0,fluxRef:0,on:false};
+/* expuesto para que bg-particles.js module el fondo con el audio */
+window.audioState=audioState;
+window.readAudio=readAudio;
 let prevSpec=null;
 /* 0 = paleta normal · 1 = paleta de fuego. Se desvanece en ambos sentidos. */
 let fireMix=0,fireTarget=0;
@@ -1316,82 +1352,7 @@ function readAudio(){
   },true);
 })();
 
-let tGlobal=0;
-const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function drawBG(){
-  if(REDUCED){ return; }   /* sin animación si el usuario la pidió desactivada */
-  tGlobal+=.016;
-  readAudio();
-  const A=audioState, LV=A.level, BS=A.bass, MD=A.mid, TR=A.treble, PU=A.punch;
-  const dark=root.dataset.theme==="dark";
-  bgCtx.clearRect(0,0,BW,BH);
-  const sat=(dark?70:80)+fireMix*18,lit=(dark?72:38)+fireMix*10;
-  // el audio agranda el alcance de las conexiones y las hace vibrar
-  const reach=90*(1+PU*.95+LV*.3), reach2=reach*reach, lw=1+PU*1.2;
-  for(let i=0;i<parts.length;i++){
-    const a=parts[i];
-    for(let j=i+1;j<parts.length;j++){
-      const b=parts[j];
-      const dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
-      if(d2<reach2){
-        const al=(1-Math.sqrt(d2)/reach)*(dark?.20:.14)*(1+PU*.9);
-        bgCtx.strokeStyle=`hsla(${hueNow(A,TR)},${sat}%,${lit}%,${al})`;
-        bgCtx.lineWidth=lw;
-        bgCtx.beginPath();bgCtx.moveTo(a.x,a.y);bgCtx.lineTo(b.x,b.y);bgCtx.stroke();
-      }
-    }
-  }
-  // movimiento firma: conexión al cursor
-  if(mouse.active){
-    for(const p of parts){
-      const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);
-      if(d<170){
-        const al=(1-d/170)*.5;
-        bgCtx.strokeStyle=`hsla(${curHue},${sat}%,${lit}%,${al})`;
-        bgCtx.lineWidth=1;
-        bgCtx.beginPath();bgCtx.moveTo(p.x,p.y);bgCtx.lineTo(mouse.x,mouse.y);bgCtx.stroke();
-        p.x+=(mouse.x-p.x)*.008;p.y+=(mouse.y-p.y)*.008;
-      }
-    }
-    bgCtx.fillStyle=`hsla(${curHue},${sat}%,${lit}%,${dark?.9:.6})`;
-    bgCtx.beginPath();bgCtx.arc(mouse.x,mouse.y,2.6,0,Math.PI*2);bgCtx.fill();
-  }
-  // partículas: mezcla de fuerza libre y anclaje a formación, tono por partícula
-  for(const p of parts){
-    if(p.mode==="free"){
-      p.free.vx+=(Math.random()-.5)*.05;p.free.vy+=(Math.random()-.5)*.05;
-      p.free.vx*=.98;p.free.vy*=.98;
-      p.x+=p.free.vx;p.y+=p.free.vy;
-      if(p.x<0||p.x>BW)p.free.vx*=-1;
-      if(p.y<0||p.y>BH)p.free.vy*=-1;
-    }else{
-      p.x+=(p.tx-p.x)*.02+Math.sin(tGlobal*p.sp+p.ph)*.18;
-      p.y+=(p.ty-p.y)*.02+Math.cos(tGlobal*p.sp*.8+p.ph)*.18;
-    }
-    // onda viajera: la amplitud la marcan los golpes (PU) sobre un colchón del
-    // nivel (LV), así el fondo late con la música en vez de vibrar parejo.
-    if(PU>.01||LV>.004){
-      const amp=.7+PU*11+LV*1.4;
-      const w=tGlobal*(1.1+LV*.5+PU*.6);
-      p.x+=Math.sin(w*1.25+p.x*.012+p.y*.006)*amp;
-      p.y+=Math.cos(w*.95+p.y*.012+p.x*.006)*amp;
-    }
-    const tw=.45+.35*Math.sin(tGlobal*2+p.ph)+TR*.32;
-    const hue=hueNow(A,TR)+p.hueJ;
-    const r=p.sz*(1+PU*.9);
-    bgCtx.fillStyle=`hsla(${hue},${sat}%,${dark?72:38}%,${Math.min(1,tw)})`;
-    bgCtx.beginPath();bgCtx.arc(p.x,p.y,r,0,Math.PI*2);bgCtx.fill();
-    if(r>3){
-      bgCtx.strokeStyle=`hsla(${hue},${sat}%,${dark?72:38}%,${Math.min(1,tw*.5)})`;
-      bgCtx.lineWidth=.8+LV*.6;
-      bgCtx.beginPath();bgCtx.arc(p.x,p.y,r+2.5+PU*3.5,0,Math.PI*2);bgCtx.stroke();
-    }
-  }
-  requestAnimationFrame(drawBG);
-}
-drawBG();
-
-
+/* drawBG eliminado: el fondo lo dibuja bg-particles.js */
 
 // ── device pan: raíl horizontal de aulas ──
 // ── reveals ──
@@ -1431,6 +1392,14 @@ document.addEventListener('DOMContentLoaded',function(){
     window.scrollTo({top:0,behavior:'smooth'});
   });
 });
+/* la portada atenúa el grafo global mientras está a la vista */
+(function(){
+  const hero=document.getElementById('top');
+  if(!hero||!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){ document.body.classList.toggle('hero-view', e.isIntersecting); });
+  },{threshold:.35}).observe(hero);
+})();
 function onScroll(){
   updateRail();
   updateReading();
@@ -1642,6 +1611,10 @@ node.on("mouseover",function(ev,d){
   });
 </script>
 <script src="translations.js" defer></script>
+<script src="ascii-hero.js" defer></script>
+<script src="shiny-text.js" defer></script>
+<script src="logo-loop.js" defer></script>
+<script src="bg-particles.js" defer></script>
 <script>
 document.querySelectorAll('#btn-es,#btn-en,#btn-zh').forEach(b=>{
   b.addEventListener('click',()=>applyLang(b.id.replace('btn-','')));
