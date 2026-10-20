@@ -165,25 +165,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;
 body.hero-view nav{background:color-mix(in srgb,var(--canvas) 34%,transparent);
   border-bottom-color:transparent}
 .nav-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.4rem}
-.brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
+.brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em;white-space:nowrap}
 .brand span{color:inherit}
 .nav-right{display:flex;align-items:center;gap:1rem}
-.nav-links{display:flex;gap:1.1rem;font-size:.82rem;font-weight:500}
-.nav-links a{color:var(--ink-soft);transition:color .15s var(--ease)}
+.nav-links{display:flex;gap:.85rem;font-size:.82rem;font-weight:500}
+.nav-links a{color:var(--ink-soft);transition:color .15s var(--ease);white-space:nowrap}
 .nav-links a:hover{color:var(--ink);text-decoration:none}
 .theme-btn{background:none;border:1px solid var(--border);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:.95rem;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;transition:border-color .15s var(--ease)}
 .theme-btn:hover{border-color:var(--accent)}
 .theme-btn:active{transform:scale(.97)}
 .menu-btn{display:none;background:none;border:1px solid var(--border);border-radius:8px;color:var(--ink);font-size:1.1rem;line-height:1;width:34px;height:34px;cursor:pointer}
-@media(max-width:760px){
-  /* backdrop-filter sobre el canvas WebGL deja un artefacto de composición
-     en móvil (una caja blanca fuera del nav). Se sustituye por fondo sólido. */
+@media(max-width:1040px){
+  /* 1040px: por debajo, la marca + los nueve enlaces no caben en una linea
+     (necesitan ~1025px) y el nav desbordaba. El menu hamburguesa entra antes.
+     Ademas, backdrop-filter sobre el canvas WebGL deja un artefacto de
+     composicion en movil (una caja blanca fuera del nav): fondo solido. */
   nav{backdrop-filter:none;-webkit-backdrop-filter:none;
       background:color-mix(in srgb,var(--canvas) 92%,transparent)}
   body.hero-view nav{background:color-mix(in srgb,var(--canvas) 78%,transparent)}
   .menu-btn{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:.9rem;background:var(--bg2,var(--surface));border-bottom:1px solid var(--border);padding:1rem 1.4rem}
   .nav-links.open{display:flex}
+}
+@media(max-width:480px){
+  /* marca + tema + idiomas + menu no caben a 390px: se aprieta el conjunto */
+  .nav-inner{padding:.8rem .9rem}
+  .brand{font-size:.82rem}
+  .nav-right{gap:.5rem}
+  #btn-es,#btn-en,#btn-zh{padding:.15rem .3rem;font-size:.7rem}
+}
+@media(max-width:360px){
+  /* a 320px el boton de menu quedaba fuera de pantalla: la marca envuelve
+     en dos lineas en vez de empujar los controles fuera del viewport */
+  .brand{white-space:normal;max-width:100px;line-height:1.15}
 }
 
 /* ── riel ── */
@@ -606,7 +620,7 @@ footer{margin-top:5rem;border-top:1px solid var(--border);background:var(--bg2,v
 </div>
 
 <nav><div class="nav-inner">
-  <div class="brand">Rodrigo<span> Molina Ávila</span></div>
+  <div class="brand">MSc. Rodrigo<span> Molina Ávila</span></div>
   <div class="nav-right">
     <div class="nav-links" id="navLinks">
       <a href="#origen">Sobre mí</a><a href="#trayectoria">Trayectoria</a>
